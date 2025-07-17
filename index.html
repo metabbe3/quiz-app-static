@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +33,13 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
+        /* Style for code blocks in questions */
+        pre {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -41,7 +47,7 @@
     <div class="w-full max-w-3xl mx-auto">
         <div id="login-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Technical Concepts Quiz</h1>
-            <p class="text-center text-gray-500 mb-8">You will have 30 minutes to complete 30 questions. Good luck!</p>
+            <p class="text-center text-gray-500 mb-8">You will have 30 minutes to complete 35 questions. Good luck!</p>
             <div class="space-y-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -64,7 +70,7 @@
                 <div id="timer" class="text-lg font-semibold text-blue-600 tabular-nums">30:00</div>
             </div>
             <div id="question-container">
-                <p id="question-text" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed"></p>
+                <div id="question-text" class="text-lg font-semibold text-gray-800 mb-6 leading-relaxed"></div>
                 <div id="options-container" class="space-y-3">
                     </div>
             </div>
@@ -117,7 +123,7 @@
     <script>
         // --- GENERAL QUESTION BANK ---
         const questionBank = [
-            // Section A: OS
+            // OS Questions...
             { question: "If a running application is like a house (a `process`), what is the best analogy for its `threads`?", options: ["Different people living in the house, sharing the same address and rooms", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address and rooms" },
             { question: "Which scenario is most like `multiprocessing`?", options: ["A single chef quickly switching between chopping, stirring, and plating", "Two separate chefs, each working in their own kitchen on different dishes", "One chef meticulously finishing one entire dish before starting the next", "Hiring a waiter to bring you ingredients"], answer: "Two separate chefs, each working in their own kitchen on different dishes" },
             { question: "Two people try to withdraw the last $100 from a shared bank account at the same time from different ATMs, leading to an incorrect negative balance. This is a real-world example of a:", options: ["Deadlock", "CPU scheduling error", "Race condition", "Memory leak"], answer: "Race condition" },
@@ -128,7 +134,7 @@
             { question: "What is a 'context switch' in an operating system?", options: ["Changing the screen resolution", "The process of storing the state of a process or thread so that it can be restored and resume execution later", "Switching between user accounts", "A hardware malfunction"], answer: "The process of storing the state of a process or thread so that it can be restored and resume execution later"},
             { question: "A 'deadlock' is a situation where:", options: ["A process terminates unexpectedly", "Two or more processes are blocked forever, each waiting for a resource held by another", "The operating system runs out of memory", "A user enters the wrong password multiple times"], answer: "Two or more processes are blocked forever, each waiting for a resource held by another"},
             
-            // Section B: Databases
+            // Database Questions...
             { question: "To ensure every student in a `Students` table has a unique ID number, you should use a:", options: ["FOREIGN KEY", "UNIQUE INDEX", "PRIMARY KEY", "CHECK constraint"], answer: "PRIMARY KEY" },
             { question: "To ensure that every `CustomerID` in an `Orders` table corresponds to a real customer in the `Customers` table, you would use a:", options: ["PRIMARY KEY on the Orders table", "FOREIGN KEY in the Orders table that references the Customers table", "UNIQUE constraint on the customer's name", "JOIN clause"], answer: "FOREIGN KEY in the Orders table that references the Customers table" },
             { question: "Why is a database `index` often compared to the index at the back of a book?", options: ["It contains a full copy of all the data", "It's a separate list that tells you exactly where to find data, so you don't have to scan every row", "It is automatically created and requires no maintenance", "It makes the database physically smaller"], answer: "It's a separate list that tells you exactly where to find data, so you don't have to scan every row" },
@@ -139,7 +145,7 @@
             { question: "What is the purpose of the `GROUP BY` clause in SQL?", options: ["To combine rows from multiple tables", "To sort the result set", "To group rows that have the same values into summary rows, like 'find the number of customers in each country'", "To add a new group of data to the table"], answer: "To group rows that have the same values into summary rows, like 'find the number of customers in each country'"},
             { question: "What does 'ACID' stand for in the context of database transactions?", options: ["Atomicity, Consistency, Isolation, Durability", "Association, Consistency, Integration, Durability", "Atomicity, Concurrency, Isolation, Durability", "Association, Concurrency, Integration, Durability"], answer: "Atomicity, Consistency, Isolation, Durability"},
 
-            // Section C: Networking & System Design
+            // Networking & System Design Questions...
             { question: "In a system with a `Load Balancer` and three servers, what happens if one server crashes?", options: ["The Load Balancer restarts the crashed server", "The Load Balancer redirects traffic to the remaining two healthy servers", "The Load Balancer shuts down the entire system", "The internet speed of the remaining servers triples"], answer: "The Load Balancer redirects traffic to the remaining two healthy servers" },
             { question: "A key advantage of using a `message broker` is that it 'decouples' services. What does this mean?", options: ["Services must be in the same programming language", "The sending service doesn't need to know if the receiving service is currently running", "It forces all communication to happen in real-time", "It eliminates the need for a network"], answer: "The sending service doesn't need to know if the receiving service is currently running" },
             { question: "Why is `statelessness` in RESTful APIs important for scalability?", options: ["The server remembers every client's previous requests", "Any server can handle any request because no session history is stored on the server", "It encrypts the application state", "It requires clients to maintain a permanent connection"], answer: "Any server can handle any request because no session history is stored on the server" },
@@ -148,7 +154,7 @@
             { question: "What is the primary purpose of a CDN (Content Delivery Network)?", options: ["To balance load across application servers", "To distribute static content (like images and videos) to servers closer to the user for faster delivery", "To act as a central database", "To provide a secure entry point to an application"], answer: "To distribute static content (like images and videos) to servers closer to the user for faster delivery"},
             { question: "In system design, what does 'scalability' refer to?", options: ["The security of the system", "The ability of a system to handle a growing amount of work by adding resources", "The physical size of the servers", "The speed of the internet connection"], answer: "The ability of a system to handle a growing amount of work by adding resources"},
 
-            // Section D: Algorithms
+            // Algorithm Questions...
             { question: "If you perform one pass of Bubble Sort on `[5, 1, 4, 2, 8]`, what is the result?", options: ["[1, 5, 4, 2, 8]", "[1, 4, 2, 5, 8]", "[1, 4, 5, 2, 8]", "[5, 1, 2, 4, 8]"], answer: "[1, 4, 2, 5, 8]" },
             { question: "What is the worst-case scenario for a linear search on an unsorted array of *n* elements?", options: ["The item is the first one you check", "The item is in the middle", "The item is not in the array at all", "The array is sorted in reverse"], answer: "The item is not in the array at all" },
             { question: "The array is sorted as `[1, 2, 4, 5, 8]`. You use Binary Search to look for the number 9. What is the time complexity?", options: ["O(n)", "O(1)", "O(log n)", "O(n^2)"], answer: "O(log n)" },
@@ -160,7 +166,7 @@
 
         // --- JAVA QUESTION BANK ---
         const javaQuestionBank = [
-            { question: "In Java, what is the primary purpose of an `interface`?", options: ["To provide a concrete implementation of a class", "To allow a class to inherit from multiple parent classes directly", "To define a contract of methods that a class must implement, achieving abstraction", "To store constant variables that cannot be changed"], answer: "To define a contract of methods that a class must implement, achieving abstraction" },
+             { question: "In Java, what is the primary purpose of an `interface`?", options: ["To provide a concrete implementation of a class", "To allow a class to inherit from multiple parent classes directly", "To define a contract of methods that a class must implement, achieving abstraction", "To store constant variables that cannot be changed"], answer: "To define a contract of methods that a class must implement, achieving abstraction" },
             { question: "How would you best describe the Java Garbage Collector (GC)?", options: ["A tool to manually free up memory", "A background process that automatically identifies and frees up memory that is no longer in use", "A security feature that prevents memory leaks", "A compiler feature that optimizes code size"], answer: "A background process that automatically identifies and frees up memory that is no longer in use" },
             { question: "What is the key difference between `==` and the `.equals()` method when comparing objects in Java?", options: ["There is no difference, they can be used interchangeably", "`.equals()` compares object memory addresses, while `==` compares their actual content", "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)", " `==` is used for primitive types only, and `.equals()` is for objects only"], answer: "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)" },
             { question: "What does the `final` keyword signify when applied to a variable in Java?", options: ["The variable can only be accessed by the final method", "The variable's value cannot be changed after it has been initialized", "The variable must be a string", "It is a global variable accessible by all classes"], answer: "The variable's value cannot be changed after it has been initialized" },
@@ -174,27 +180,94 @@
             { question: "What is the purpose of the `super` keyword in Java?", options: ["To call a method in the same class", "To refer to the immediate parent class object", "To create a new instance of the current class", "To declare a class as final"], answer: "To refer to the immediate parent class object" }
         ];
 
+        // --- NEW: SCENARIO-BASED CODING QUESTIONS ---
+        const javaScenarioCode = `
+<h3 class='text-md font-semibold text-gray-700 mb-2'>Read the Java code below and answer the following questions:</h3>
+<pre class='bg-gray-100 p-3 rounded text-sm w-full overflow-x-auto'>
+abstract class Vehicle {
+    protected String name;
+    public Vehicle(String name) { this.name = name; }
+    abstract void accelerate();
+}
+
+class Car extends Vehicle {
+    private int speed = 0;
+    public Car(String name) { super(name); }
+    @Override
+    void accelerate() { this.speed += 10; }
+    public int getSpeed() { return this.speed; }
+}
+
+class RaceControl {
+    private static int totalOvertakes = 0;
+    // NOTE: This method is not thread-safe
+    public static void recordOvertake() {
+        totalOvertakes++;
+    }
+    public static int getTotalOvertakes() { return totalOvertakes; }
+}
+
+public class RaceCar implements Runnable {
+    private Car car;
+    public RaceCar(Car car) { this.car = car; }
+    @Override
+    public void run() {
+        for(int i = 0; i < 3; i++) {
+            car.accelerate();
+            if(car.getSpeed() >= 20) {
+                RaceControl.recordOvertake();
+            }
+            try { Thread.sleep(5); } catch (InterruptedException e) {}
+        }
+    }
+}
+</pre><hr class="my-4">`;
+
+        const scenarioCodingQuestionBank = [
+            {
+                question: "After a single `RaceCar` task is executed completely by one thread, what will be the final speed of its associated `Car` object?",
+                options: ["30", "20", "10", "0"],
+                answer: "30"
+            },
+            {
+                question: "Which of the following lines of code would cause a compilation error if added to a main method?",
+                options: ["Car myCar = new Car(\"Test\");", "Vehicle myVehicle = new Car(\"Test\");", "new Thread(new RaceCar(new Car(\"Test\"))).start();", "Vehicle v = new Vehicle(\"Test\");"],
+                answer: "Vehicle v = new Vehicle(\"Test\");"
+            },
+            {
+                question: "If two separate threads are created, each with its own `RaceCar` task, and both run to completion, what is the *guaranteed* final value of `RaceControl.getTotalOvertakes()`?",
+                options: ["4", "2", "The value is not guaranteed and could be 2, 3, or 4.", "The code will throw an exception."],
+                answer: "The value is not guaranteed and could be 2, 3, or 4."
+            },
+            {
+                question: "How could you modify `RaceControl` to make `recordOvertake()` thread-safe and guarantee the correct final count?",
+                options: ["Make the `totalOvertakes` variable `volatile`.", "Add the `synchronized` keyword to the `recordOvertake` method signature.", "Replace `int` with `String` for `totalOvertakes`.", "The method is already thread-safe."],
+                answer: "Add the `synchronized` keyword to the `recordOvertake` method signature."
+            },
+            {
+                question: "In the `RaceCar.run()` method, what is the primary purpose of calling `Thread.sleep(5)`?",
+                options: ["To permanently stop the thread.", "To ensure this thread finishes before any others can start.", "To pause the thread's execution briefly, making a race condition more likely to be observable.", "To increase the car's speed directly."],
+                answer: "To pause the thread's execution briefly, making a race condition more likely to be observable."
+            }
+        ];
+
         // --- DOM Elements ---
         const loginScreen = document.getElementById('login-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const resultsScreen = document.getElementById('results-screen');
-
         const startBtn = document.getElementById('start-btn');
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const restartBtn = document.getElementById('restart-btn');
         const downloadBtn = document.getElementById('download-btn');
-
         const nameInput = document.getElementById('name');
         const companyIdInput = document.getElementById('companyId');
         const loginError = document.getElementById('login-error');
-
         const questionNumberEl = document.getElementById('question-number');
         const totalQuestionsEl = document.getElementById('total-questions');
         const questionTextEl = document.getElementById('question-text');
         const optionsContainer = document.getElementById('options-container');
         const timerEl = document.getElementById('timer');
-
         const resultNameEl = document.getElementById('result-name');
         const resultCompanyIdEl = document.getElementById('result-companyId');
         const resultTimeEl = document.getElementById('result-time');
@@ -212,11 +285,6 @@
         let timeRemaining = timeLimit;
 
         // --- Functions ---
-
-        /**
-         * Shuffles an array in place using the Fisher-Yates algorithm.
-         * @param {Array} array The array to shuffle.
-         */
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -224,33 +292,22 @@
             }
         }
 
-        /**
-         * Formats seconds into MM:SS format.
-         * @param {number} totalSeconds The total seconds to format.
-         * @returns {string} The formatted time string.
-         */
         function formatTime(totalSeconds) {
             const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
             const seconds = (totalSeconds % 60).toString().padStart(2, '0');
             return `${minutes}:${seconds}`;
         }
 
-        /**
-         * Starts the countdown timer for the quiz.
-         */
         function startTimer() {
             timeRemaining = timeLimit;
             timerEl.textContent = formatTime(timeRemaining);
             timerEl.classList.remove('timer-warning');
-
             timerInterval = setInterval(() => {
                 timeRemaining--;
                 timerEl.textContent = formatTime(timeRemaining);
-
                 if (timeRemaining <= 60 && !timerEl.classList.contains('timer-warning')) {
                     timerEl.classList.add('timer-warning');
                 }
-
                 if (timeRemaining <= 0) {
                     stopTimer();
                     alert("Time's up! The quiz will now be submitted.");
@@ -259,45 +316,30 @@
             }, 1000);
         }
 
-        /**
-         * Stops the timer.
-         */
         function stopTimer() {
             clearInterval(timerInterval);
         }
         
-        /**
-         * Transitions between screens with a fade effect.
-         * @param {HTMLElement} hideEl The element to hide.
-         * @param {HTMLElement} showEl The element to show.
-         */
         function switchScreen(hideEl, showEl) {
             hideEl.style.opacity = '0';
             setTimeout(() => {
                 hideEl.classList.add('hidden');
                 showEl.classList.remove('hidden');
-                setTimeout(() => {
-                    showEl.style.opacity = '1';
-                }, 50);
+                setTimeout(() => { showEl.style.opacity = '1'; }, 50);
             }, 500);
         }
 
-        /**
-         * Initializes and starts the quiz.
-         */
         function startQuiz() {
             const name = nameInput.value.trim();
             const companyId = companyIdInput.value.trim();
-
             if (!name || !companyId) {
                 loginError.textContent = 'Please fill in both fields.';
                 return;
             }
             loginError.textContent = '';
-
             currentQuestionIndex = 0;
             
-            // --- MODIFIED LOGIC ---
+            // --- MODIFIED LOGIC FOR 35 QUESTIONS ---
             // 1. Select 25 random general questions
             let allGeneralQuestions = [...questionBank];
             shuffleArray(allGeneralQuestions);
@@ -308,72 +350,57 @@
             shuffleArray(allJavaQuestions);
             const javaQuestions = allJavaQuestions.slice(0, 5);
 
-            // 3. Combine and shuffle the final question list
-            shuffledQuestions = [...generalQuestions, ...javaQuestions];
-            shuffleArray(shuffledQuestions); // Shuffle them together
+            // 3. Prepare the 5 scenario-based questions by prepending the code
+            const scenarioQuestions = scenarioCodingQuestionBank.map(q => {
+                // Return a new object to avoid modifying the original bank
+                return { 
+                    ...q, 
+                    question: javaScenarioCode + q.question 
+                };
+            });
+
+            // 4. Combine and shuffle the final question list
+            shuffledQuestions = [...generalQuestions, ...javaQuestions, ...scenarioQuestions];
+            shuffleArray(shuffledQuestions);
             // --- END MODIFIED LOGIC ---
 
             userAnswers = new Array(shuffledQuestions.length).fill(null);
-
             totalQuestionsEl.textContent = shuffledQuestions.length;
             switchScreen(loginScreen, quizScreen);
             displayQuestion();
             startTimer();
         }
 
-        /**
-         * Displays the current question and its options.
-         */
         function displayQuestion() {
             const question = shuffledQuestions[currentQuestionIndex];
             questionNumberEl.textContent = currentQuestionIndex + 1;
             questionTextEl.innerHTML = question.question; 
             
             optionsContainer.innerHTML = '';
-            const options = question.options;
-
-            options.forEach(option => {
+            question.options.forEach(option => {
                 const button = document.createElement('button');
                 button.innerHTML = option;
                 button.classList.add('w-full', 'p-4', 'text-left', 'border', 'border-gray-300', 'rounded-lg', 'option-btn');
-                
                 if (option === userAnswers[currentQuestionIndex]) {
                     button.classList.add('selected');
                 }
-
                 button.onclick = () => selectAnswer(option);
                 optionsContainer.appendChild(button);
             });
-
             updateNavigationButtons();
         }
 
-        /**
-         * Handles the selection of an answer.
-         * @param {string} selectedOption The option chosen by the user.
-         */
         function selectAnswer(selectedOption) {
             userAnswers[currentQuestionIndex] = selectedOption;
             displayQuestion();
         }
 
-        /**
-         * Updates the state and text of navigation buttons.
-         */
         function updateNavigationButtons() {
             prevBtn.disabled = currentQuestionIndex === 0;
             prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
-            
-            if (currentQuestionIndex === shuffledQuestions.length - 1) {
-                nextBtn.textContent = 'Finish';
-            } else {
-                nextBtn.textContent = 'Next';
-            }
+            nextBtn.textContent = (currentQuestionIndex === shuffledQuestions.length - 1) ? 'Finish' : 'Next';
         }
 
-        /**
-         * Navigates to the next question or finishes the quiz.
-         */
         function nextQuestion() {
             if (currentQuestionIndex < shuffledQuestions.length - 1) {
                 currentQuestionIndex++;
@@ -383,9 +410,6 @@
             }
         }
 
-        /**
-         * Navigates to the previous question.
-         */
         function previousQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
@@ -393,18 +417,12 @@
             }
         }
 
-        /**
-         * Finishes the quiz and displays the results.
-         */
         function finishQuiz() {
             stopTimer();
             calculateAndShowResults();
             switchScreen(quizScreen, resultsScreen);
         }
 
-        /**
-         * Calculates scores and populates the results screen.
-         */
         function calculateAndShowResults() {
             let correctCount = 0;
             detailedResultsEl.innerHTML = '';
@@ -412,15 +430,16 @@
             shuffledQuestions.forEach((question, index) => {
                 const userAnswer = userAnswers[index];
                 const isCorrect = userAnswer === question.answer;
-                if (isCorrect) {
-                    correctCount++;
-                }
+                if (isCorrect) correctCount++;
 
                 const resultItem = document.createElement('div');
                 resultItem.classList.add('p-4', 'rounded-lg', isCorrect ? 'bg-green-50' : 'bg-red-50', 'border', isCorrect ? 'border-green-200' : 'border-red-200');
                 
+                // For results, we strip the code block to keep it clean
+                const questionOnly = question.question.substring(question.question.indexOf('<hr '));
+                
                 resultItem.innerHTML = `
-                    <p class="font-bold text-gray-800">${index + 1}. ${question.question}</p>
+                    <p class="font-bold text-gray-800">${index + 1}. ${questionOnly}</p>
                     <p class="mt-2 text-sm ${isCorrect ? 'text-green-700' : 'text-red-700'}">Your answer: <span class="font-semibold">${userAnswer || 'Not answered'}</span></p>
                     ${!isCorrect ? `<p class="mt-1 text-sm text-green-800">Correct answer: <span class="font-semibold">${question.answer}</span></p>` : ''}
                 `;
@@ -438,30 +457,27 @@
             incorrectAnswersEl.textContent = incorrectCount;
         }
 
-        /**
-         * Generates and triggers the download of a .txt file with the quiz results.
-         */
         function generateTxtFile() {
             let fileContent = "Technical Concepts Quiz Results\n";
             fileContent += "=================================\n\n";
             fileContent += `Name: ${nameInput.value}\n`;
             fileContent += `Company ID: ${companyIdInput.value}\n\n`;
-            
             fileContent += "--- Summary ---\n";
             fileContent += `Final Score: ${scoreEl.textContent}\n`;
             fileContent += `Correct Answers: ${correctAnswersEl.textContent}\n`;
             fileContent += `Incorrect Answers: ${incorrectAnswersEl.textContent}\n`;
             fileContent += `Time Taken: ${resultTimeEl.textContent}\n\n`;
-
             fileContent += "--- Detailed Breakdown ---\n\n";
 
             shuffledQuestions.forEach((question, index) => {
                 const userAnswer = userAnswers[index] || "Not answered";
                 const isCorrect = userAnswer === question.answer;
-                fileContent += `Question ${index + 1}: ${question.question.replace(/<[^>]*>?/gm, '')}\n`; // Strip HTML tags for TXT
-                fileContent += `Your Answer: ${userAnswer.replace(/<[^>]*>?/gm, '')}\n`;
+                // Strip all HTML tags for the text file
+                const plainTextQuestion = question.question.replace(/<[^>]*>?/gm, '');
+                fileContent += `Question ${index + 1}: ${plainTextQuestion}\n`;
+                fileContent += `Your Answer: ${userAnswer}\n`;
                 if (!isCorrect) {
-                    fileContent += `Correct Answer: ${question.answer.replace(/<[^>]*>?/gm, '')}\n`;
+                    fileContent += `Correct Answer: ${question.answer}\n`;
                 }
                 fileContent += `Result: ${isCorrect ? 'Correct' : 'Incorrect'}\n`;
                 fileContent += "---------------------------------\n\n";
@@ -480,9 +496,6 @@
             URL.revokeObjectURL(url);
         }
 
-        /**
-         * Resets the quiz to the initial login screen.
-         */
         function restartQuiz() {
             nameInput.value = '';
             companyIdInput.value = '';
@@ -499,4 +512,3 @@
     </script>
 </body>
 </html>
-```
