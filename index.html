@@ -1,3 +1,12 @@
+Of course. I've updated the quiz logic to now include 30 questions in total: 25 from the general pool and 5 from the Java-specific bank.
+
+I have adjusted the `startQuiz` function to select 5 random Java questions and updated the introductory text on the login screen to reflect the new total of 30 questions.
+
+Here is the complete, updated code.
+
+-----
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,10 +47,9 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-3xl mx-auto">
-        <!-- Login Screen -->
         <div id="login-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Technical Concepts Quiz</h1>
-            <p class="text-center text-gray-500 mb-8">You will have 30 minutes to complete 25 questions. Good luck!</p>
+            <p class="text-center text-gray-500 mb-8">You will have 30 minutes to complete 30 questions. Good luck!</p>
             <div class="space-y-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -58,7 +66,6 @@
             <p id="login-error" class="text-red-500 text-center mt-4 h-4"></p>
         </div>
 
-        <!-- Quiz Screen -->
         <div id="quiz-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container hidden">
             <div id="quiz-header" class="flex justify-between items-center border-b pb-4 mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Question <span id="question-number"></span>/<span id="total-questions"></span></h2>
@@ -67,8 +74,7 @@
             <div id="question-container">
                 <p id="question-text" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed"></p>
                 <div id="options-container" class="space-y-3">
-                    <!-- Options will be dynamically inserted here -->
-                </div>
+                    </div>
             </div>
             <div class="flex justify-between mt-8">
                 <button id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">Previous</button>
@@ -76,7 +82,6 @@
             </div>
         </div>
 
-        <!-- Results Screen -->
         <div id="results-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container hidden">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Quiz Completed!</h1>
             <p class="text-center text-gray-500 mb-6">Here is your performance summary.</p>
@@ -105,8 +110,7 @@
             </div>
 
             <div id="detailed-results" class="space-y-4 mb-8 max-h-96 overflow-y-auto pr-4">
-                <!-- Detailed results will be dynamically inserted here -->
-            </div>
+                </div>
             <div class="flex space-x-4">
                 <button id="restart-btn" class="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-transform transform hover:scale-105">
                     Try Again
@@ -119,7 +123,7 @@
     </div>
 
     <script>
-        // --- EXPANDED QUESTION BANK ---
+        // --- GENERAL QUESTION BANK ---
         const questionBank = [
             // Section A: OS
             { question: "If a running application is like a house (a `process`), what is the best analogy for its `threads`?", options: ["Different people living in the house, sharing the same address and rooms", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address and rooms" },
@@ -160,6 +164,22 @@
             { question: "An algorithm has `O(1)` (constant) space complexity. What does this mean?", options: ["Memory usage grows with input size", "It requires no memory", "Its memory usage is fixed regardless of input size", "It's faster than O(n) space complexity"], answer: "Its memory usage is fixed regardless of input size" },
             { question: "Which data structure operates on a 'First-In, First-Out' (FIFO) basis?", options: ["Stack", "Queue", "Hash Table", "Tree"], answer: "Queue"},
             { question: "What is the primary advantage of a Hash Table over an Array for lookups?", options: ["It uses less memory", "It maintains the order of elements", "It provides average O(1) time complexity for search, insert, and delete operations", "It is easier to sort"], answer: "It provides average O(1) time complexity for search, insert, and delete operations"}
+        ];
+
+        // --- JAVA QUESTION BANK ---
+        const javaQuestionBank = [
+            { question: "In Java, what is the primary purpose of an `interface`?", options: ["To provide a concrete implementation of a class", "To allow a class to inherit from multiple parent classes directly", "To define a contract of methods that a class must implement, achieving abstraction", "To store constant variables that cannot be changed"], answer: "To define a contract of methods that a class must implement, achieving abstraction" },
+            { question: "How would you best describe the Java Garbage Collector (GC)?", options: ["A tool to manually free up memory", "A background process that automatically identifies and frees up memory that is no longer in use", "A security feature that prevents memory leaks", "A compiler feature that optimizes code size"], answer: "A background process that automatically identifies and frees up memory that is no longer in use" },
+            { question: "What is the key difference between `==` and the `.equals()` method when comparing objects in Java?", options: ["There is no difference, they can be used interchangeably", "`.equals()` compares object memory addresses, while `==` compares their actual content", "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)", " `==` is used for primitive types only, and `.equals()` is for objects only"], answer: "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)" },
+            { question: "What does the `final` keyword signify when applied to a variable in Java?", options: ["The variable can only be accessed by the final method", "The variable's value cannot be changed after it has been initialized", "The variable must be a string", "It is a global variable accessible by all classes"], answer: "The variable's value cannot be changed after it has been initialized" },
+            { question: "In Java, what is the advantage of using a `try-with-resources` statement?", options: ["It makes the code run faster", "It automatically closes resources like streams or connections, preventing resource leaks", "It allows for more than one `catch` block", "It converts checked exceptions to unchecked exceptions"], answer: "It automatically closes resources like streams or connections, preventing resource leaks" },
+            { question: "Which of these collections in Java does not allow duplicate elements and is unordered?", options: ["ArrayList", "LinkedList", "HashSet", "TreeMap"], answer: "HashSet" },
+            { question: "What is the difference between a `checked exception` and an `unchecked exception` in Java?", options: ["Checked exceptions must be handled at compile-time, while unchecked exceptions are runtime errors", "Unchecked exceptions are more severe than checked exceptions", "There is no functional difference, it's just a naming convention", "Checked exceptions only occur in multi-threaded code"], answer: "Checked exceptions must be handled at compile-time, while unchecked exceptions are runtime errors" },
+            { question: "What will happen if you declare a method as `static` in a Java class?", options: ["The method can only be called on an instance of the class", "The method can be called without creating an instance of the class", "The method cannot be overridden by subclasses", "The method becomes abstract"], answer: "The method can be called without creating an instance of the class" },
+            { question: "Which is a thread-safe, synchronized alternative to `HashMap`?", options: ["TreeMap", "HashSet", "ArrayList", "Hashtable"], answer: "Hashtable" },
+            { question: "What is the main function of the Java Virtual Machine (JVM)?", options: ["To write Java source code", "To convert Java source code into bytecode", "To execute Java bytecode on any platform that has a compatible JVM", "To debug Java applications"], answer: "To execute Java bytecode on any platform that has a compatible JVM" },
+            { question: "If a class is declared as `abstract`, what is true?", options: ["You must create an instance of it", "It cannot have any concrete (non-abstract) methods", "It cannot be instantiated directly and may contain abstract methods", "It must extend another abstract class"], answer: "It cannot be instantiated directly and may contain abstract methods" },
+            { question: "What is the purpose of the `super` keyword in Java?", options: ["To call a method in the same class", "To refer to the immediate parent class object", "To create a new instance of the current class", "To declare a class as final"], answer: "To refer to the immediate parent class object" }
         ];
 
         // --- DOM Elements ---
@@ -285,9 +305,21 @@
 
             currentQuestionIndex = 0;
             
-            let allQuestions = [...questionBank];
-            shuffleArray(allQuestions);
-            shuffledQuestions = allQuestions.slice(0, 25);
+            // --- MODIFIED LOGIC ---
+            // 1. Select 25 random general questions
+            let allGeneralQuestions = [...questionBank];
+            shuffleArray(allGeneralQuestions);
+            const generalQuestions = allGeneralQuestions.slice(0, 25);
+
+            // 2. Select 5 random Java questions
+            let allJavaQuestions = [...javaQuestionBank];
+            shuffleArray(allJavaQuestions);
+            const javaQuestions = allJavaQuestions.slice(0, 5);
+
+            // 3. Combine and shuffle the final question list
+            shuffledQuestions = [...generalQuestions, ...javaQuestions];
+            shuffleArray(shuffledQuestions); // Shuffle them together
+            // --- END MODIFIED LOGIC ---
 
             userAnswers = new Array(shuffledQuestions.length).fill(null);
 
@@ -475,3 +507,4 @@
     </script>
 </body>
 </html>
+```
