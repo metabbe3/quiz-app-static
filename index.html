@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technical Concepts Quiz</title>
+    <title>Senior Technical Concepts Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -44,9 +44,11 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
+    <img id="system-diagram" src="https://i.imgur.com/8a1fJ1g.png" alt="System Architecture Diagram" class="hidden">
+
     <div class="w-full max-w-3xl mx-auto">
         <div id="login-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container">
-            <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Technical Concepts Quiz</h1>
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Senior Technical Concepts Quiz</h1>
             <p class="text-center text-gray-500 mb-8">You will have 30 minutes to complete 35 questions. Good luck!</p>
             <div class="space-y-6">
                 <div>
@@ -70,9 +72,9 @@
                 <div id="timer" class="text-lg font-semibold text-blue-600 tabular-nums">30:00</div>
             </div>
             <div id="question-container">
-                <div id="question-text" class="text-lg font-semibold text-gray-800 mb-6 leading-relaxed"></div>
+                <div id="question-text" class="text-lg text-gray-800 mb-6 leading-relaxed"></div>
                 <div id="options-container" class="space-y-3">
-                    </div>
+                </div>
             </div>
             <div class="flex justify-between mt-8">
                 <button id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">Previous</button>
@@ -108,7 +110,7 @@
             </div>
 
             <div id="detailed-results" class="space-y-4 mb-8 max-h-96 overflow-y-auto pr-4">
-                </div>
+            </div>
             <div class="flex space-x-4">
                 <button id="restart-btn" class="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-transform transform hover:scale-105">
                     Try Again
@@ -125,48 +127,36 @@
         const questionBank = [
             // OS Questions...
             { question: "If a running application is like a house (a `process`), what is the best analogy for its `threads`?", options: ["Different people living in the house, sharing the same address and rooms", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address and rooms" },
-            { question: "Which scenario is most like `multiprocessing`?", options: ["A single chef quickly switching between chopping, stirring, and plating", "Two separate chefs, each working in their own kitchen on different dishes", "One chef meticulously finishing one entire dish before starting the next", "Hiring a waiter to bring you ingredients"], answer: "Two separate chefs, each working in their own kitchen on different dishes" },
-            { question: "Two people try to withdraw the last $100 from a shared bank account at the same time from different ATMs, leading to an incorrect negative balance. This is a real-world example of a:", options: ["Deadlock", "CPU scheduling error", "Race condition", "Memory leak"], answer: "Race condition" },
             { question: "What problem does `virtual memory` primarily solve for an application?", options: ["It prevents the application from ever crashing", "It allows an application to act as if it has a vast, private memory space, even if the physical hardware is limited", "It makes the computer's physical RAM faster", "It secures the application from network attacks"], answer: "It allows an application to act as if it has a vast, private memory space, even if the physical hardware is limited" },
             { question: "A `cache` is to a computer's main memory (RAM) as...", options: ["A library is to a single book", "A small, personal toolbox is to a large hardware store", "A car's engine is to its wheels", "A file cabinet is to the documents inside it"], answer: "A small, personal toolbox is to a large hardware store" },
-            { question: "Which description matches an `asynchronous` operation?", options: ["Ordering coffee and waiting at the counter, unable to do anything else until it's ready", "Ordering coffee, receiving a buzzer, and sitting down to wait", "Deciding not to order coffee", "The barista making multiple coffees at once"], answer: "Ordering coffee, receiving a buzzer, and sitting down to wait" },
-            { question: "What is the best way to describe the difference between a `program` and a `process`?", options: ["A program is a recipe, while a process is the act of cooking that recipe", "A program is an active entity, while a process is passive", "They are identical concepts", "A program is machine code, and a process is source code"], answer: "A program is a recipe, while a process is the act of cooking that recipe" },
             { question: "What is a 'context switch' in an operating system?", options: ["Changing the screen resolution", "The process of storing the state of a process or thread so that it can be restored and resume execution later", "Switching between user accounts", "A hardware malfunction"], answer: "The process of storing the state of a process or thread so that it can be restored and resume execution later"},
             { question: "A 'deadlock' is a situation where:", options: ["A process terminates unexpectedly", "Two or more processes are blocked forever, each waiting for a resource held by another", "The operating system runs out of memory", "A user enters the wrong password multiple times"], answer: "Two or more processes are blocked forever, each waiting for a resource held by another"},
             
             // Database Questions...
             { question: "To ensure every student in a `Students` table has a unique ID number, you should use a:", options: ["FOREIGN KEY", "UNIQUE INDEX", "PRIMARY KEY", "CHECK constraint"], answer: "PRIMARY KEY" },
-            { question: "To ensure that every `CustomerID` in an `Orders` table corresponds to a real customer in the `Customers` table, you would use a:", options: ["PRIMARY KEY on the Orders table", "FOREIGN KEY in the Orders table that references the Customers table", "UNIQUE constraint on the customer's name", "JOIN clause"], answer: "FOREIGN KEY in the Orders table that references the Customers table" },
             { question: "Why is a database `index` often compared to the index at the back of a book?", options: ["It contains a full copy of all the data", "It's a separate list that tells you exactly where to find data, so you don't have to scan every row", "It is automatically created and requires no maintenance", "It makes the database physically smaller"], answer: "It's a separate list that tells you exactly where to find data, so you don't have to scan every row" },
             { question: "While an `index` dramatically speeds up data retrieval (`SELECT`), what is the inherent trade-off?", options: ["It makes the database less secure", "It slightly slows down data modification (`INSERT`, `UPDATE`) because the index must also be updated", "It can only be used on small tables", "It makes `SELECT` statements more complex"], answer: "It slightly slows down data modification (`INSERT`, `UPDATE`) because the index must also be updated" },
-            { question: "What is a common strategy to scale a database by splitting customer data across multiple servers?", options: ["Database replication", "Database sharding", "Database caching", "Database backup"], answer: "Database sharding" },
-            { question: "Which SQL keyword forms the foundation of every query that aims to read data from a database?", options: ["FETCH", "QUERY", "GET", "SELECT"], answer: "SELECT" },
             { question: "You need a report showing customer names next to their order dates from two separate tables. Which SQL operation is designed for this?", options: ["UNION", "GROUP BY", "JOIN", "ALTER"], answer: "JOIN" },
-            { question: "What is the purpose of the `GROUP BY` clause in SQL?", options: ["To combine rows from multiple tables", "To sort the result set", "To group rows that have the same values into summary rows, like 'find the number of customers in each country'", "To add a new group of data to the table"], answer: "To group rows that have the same values into summary rows, like 'find the number of customers in each country'"},
             { question: "What does 'ACID' stand for in the context of database transactions?", options: ["Atomicity, Consistency, Isolation, Durability", "Association, Consistency, Integration, Durability", "Atomicity, Concurrency, Isolation, Durability", "Association, Concurrency, Integration, Durability"], answer: "Atomicity, Consistency, Isolation, Durability"},
 
             // Networking & System Design Questions...
             { question: "In a system with a `Load Balancer` and three servers, what happens if one server crashes?", options: ["The Load Balancer restarts the crashed server", "The Load Balancer redirects traffic to the remaining two healthy servers", "The Load Balancer shuts down the entire system", "The internet speed of the remaining servers triples"], answer: "The Load Balancer redirects traffic to the remaining two healthy servers" },
-            { question: "A key advantage of using a `message broker` is that it 'decouples' services. What does this mean?", options: ["Services must be in the same programming language", "The sending service doesn't need to know if the receiving service is currently running", "It forces all communication to happen in real-time", "It eliminates the need for a network"], answer: "The sending service doesn't need to know if the receiving service is currently running" },
             { question: "Why is `statelessness` in RESTful APIs important for scalability?", options: ["The server remembers every client's previous requests", "Any server can handle any request because no session history is stored on the server", "It encrypts the application state", "It requires clients to maintain a permanent connection"], answer: "Any server can handle any request because no session history is stored on the server" },
             { question: "The HTTP protocol is fundamentally a `request-response` protocol. What does this mean?", options: ["A client must wait for a response before sending another request", "Communication is initiated by the server", "The connection is kept open permanently", "A client sends a request, and the server sends a response; the server cannot initiate contact"], answer: "A client sends a request, and the server sends a response; the server cannot initiate contact" },
-            { question: "If you skip clarifying requirements when building a system, what is the most likely outcome?", options: ["The project will finish ahead of schedule", "You will build a system that doesn't meet the user's actual needs", "The choice of programming language will be easier", "The database will be perfectly designed"], answer: "You will build a system that doesn't meet the user's actual needs" },
             { question: "What is the primary purpose of a CDN (Content Delivery Network)?", options: ["To balance load across application servers", "To distribute static content (like images and videos) to servers closer to the user for faster delivery", "To act as a central database", "To provide a secure entry point to an application"], answer: "To distribute static content (like images and videos) to servers closer to the user for faster delivery"},
             { question: "In system design, what does 'scalability' refer to?", options: ["The security of the system", "The ability of a system to handle a growing amount of work by adding resources", "The physical size of the servers", "The speed of the internet connection"], answer: "The ability of a system to handle a growing amount of work by adding resources"},
 
             // Algorithm Questions...
-            { question: "If you perform one pass of Bubble Sort on `[5, 1, 4, 2, 8]`, what is the result?", options: ["[1, 5, 4, 2, 8]", "[1, 4, 2, 5, 8]", "[1, 4, 5, 2, 8]", "[5, 1, 2, 4, 8]"], answer: "[1, 4, 2, 5, 8]" },
             { question: "What is the worst-case scenario for a linear search on an unsorted array of *n* elements?", options: ["The item is the first one you check", "The item is in the middle", "The item is not in the array at all", "The array is sorted in reverse"], answer: "The item is not in the array at all" },
             { question: "The array is sorted as `[1, 2, 4, 5, 8]`. You use Binary Search to look for the number 9. What is the time complexity?", options: ["O(n)", "O(1)", "O(log n)", "O(n^2)"], answer: "O(log n)" },
             { question: "You need to cache user profiles for quick retrieval using a unique username string. What data structure is best?", options: ["Linked List", "Hash Table (or Dictionary)", "Simple Array", "Stack"], answer: "Hash Table (or Dictionary)" },
             { question: "An algorithm has `O(1)` (constant) space complexity. What does this mean?", options: ["Memory usage grows with input size", "It requires no memory", "Its memory usage is fixed regardless of input size", "It's faster than O(n) space complexity"], answer: "Its memory usage is fixed regardless of input size" },
-            { question: "Which data structure operates on a 'First-In, First-Out' (FIFO) basis?", options: ["Stack", "Queue", "Hash Table", "Tree"], answer: "Queue"},
-            { question: "What is the primary advantage of a Hash Table over an Array for lookups?", options: ["It uses less memory", "It maintains the order of elements", "It provides average O(1) time complexity for search, insert, and delete operations", "It is easier to sort"], answer: "It provides average O(1) time complexity for search, insert, and delete operations"}
+            { question: "Which data structure operates on a 'First-In, First-Out' (FIFO) basis?", options: ["Stack", "Queue", "Hash Table", "Tree"], answer: "Queue"}
         ];
 
         // --- JAVA QUESTION BANK ---
         const javaQuestionBank = [
-             { question: "In Java, what is the primary purpose of an `interface`?", options: ["To provide a concrete implementation of a class", "To allow a class to inherit from multiple parent classes directly", "To define a contract of methods that a class must implement, achieving abstraction", "To store constant variables that cannot be changed"], answer: "To define a contract of methods that a class must implement, achieving abstraction" },
+            { question: "In Java, what is the primary purpose of an `interface`?", options: ["To provide a concrete implementation of a class", "To allow a class to inherit from multiple parent classes directly", "To define a contract of methods that a class must implement, achieving abstraction", "To store constant variables that cannot be changed"], answer: "To define a contract of methods that a class must implement, achieving abstraction" },
             { question: "How would you best describe the Java Garbage Collector (GC)?", options: ["A tool to manually free up memory", "A background process that automatically identifies and frees up memory that is no longer in use", "A security feature that prevents memory leaks", "A compiler feature that optimizes code size"], answer: "A background process that automatically identifies and frees up memory that is no longer in use" },
             { question: "What is the key difference between `==` and the `.equals()` method when comparing objects in Java?", options: ["There is no difference, they can be used interchangeably", "`.equals()` compares object memory addresses, while `==` compares their actual content", "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)", " `==` is used for primitive types only, and `.equals()` is for objects only"], answer: "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)" },
             { question: "What does the `final` keyword signify when applied to a variable in Java?", options: ["The variable can only be accessed by the final method", "The variable's value cannot be changed after it has been initialized", "The variable must be a string", "It is a global variable accessible by all classes"], answer: "The variable's value cannot be changed after it has been initialized" },
@@ -174,13 +164,12 @@
             { question: "Which of these collections in Java does not allow duplicate elements and is unordered?", options: ["ArrayList", "LinkedList", "HashSet", "TreeMap"], answer: "HashSet" },
             { question: "What is the difference between a `checked exception` and an `unchecked exception` in Java?", options: ["Checked exceptions must be handled at compile-time, while unchecked exceptions are runtime errors", "Unchecked exceptions are more severe than checked exceptions", "There is no functional difference, it's just a naming convention", "Checked exceptions only occur in multi-threaded code"], answer: "Checked exceptions must be handled at compile-time, while unchecked exceptions are runtime errors" },
             { question: "What will happen if you declare a method as `static` in a Java class?", options: ["The method can only be called on an instance of the class", "The method can be called without creating an instance of the class", "The method cannot be overridden by subclasses", "The method becomes abstract"], answer: "The method can be called without creating an instance of the class" },
-            { question: "Which is a thread-safe, synchronized alternative to `HashMap`?", options: ["TreeMap", "HashSet", "ArrayList", "Hashtable"], answer: "Hashtable" },
             { question: "What is the main function of the Java Virtual Machine (JVM)?", options: ["To write Java source code", "To convert Java source code into bytecode", "To execute Java bytecode on any platform that has a compatible JVM", "To debug Java applications"], answer: "To execute Java bytecode on any platform that has a compatible JVM" },
             { question: "If a class is declared as `abstract`, what is true?", options: ["You must create an instance of it", "It cannot have any concrete (non-abstract) methods", "It cannot be instantiated directly and may contain abstract methods", "It must extend another abstract class"], answer: "It cannot be instantiated directly and may contain abstract methods" },
             { question: "What is the purpose of the `super` keyword in Java?", options: ["To call a method in the same class", "To refer to the immediate parent class object", "To create a new instance of the current class", "To declare a class as final"], answer: "To refer to the immediate parent class object" }
         ];
-
-        // --- NEW: SCENARIO-BASED CODING QUESTIONS ---
+        
+        // --- SCENARIO-BASED CODING QUESTIONS (CONTEXT) ---
         const javaScenarioCode = `
 <h3 class='text-md font-semibold text-gray-700 mb-2'>Read the Java code below and answer the following questions:</h3>
 <pre class='bg-gray-100 p-3 rounded text-sm w-full overflow-x-auto'>
@@ -224,32 +213,37 @@ public class RaceCar implements Runnable {
 </pre><hr class="my-4">`;
 
         const scenarioCodingQuestionBank = [
-            {
-                question: "After a single `RaceCar` task is executed completely by one thread, what will be the final speed of its associated `Car` object?",
-                options: ["30", "20", "10", "0"],
-                answer: "30"
-            },
-            {
-                question: "Which of the following lines of code would cause a compilation error if added to a main method?",
-                options: ["Car myCar = new Car(\"Test\");", "Vehicle myVehicle = new Car(\"Test\");", "new Thread(new RaceCar(new Car(\"Test\"))).start();", "Vehicle v = new Vehicle(\"Test\");"],
-                answer: "Vehicle v = new Vehicle(\"Test\");"
-            },
-            {
-                question: "If two separate threads are created, each with its own `RaceCar` task, and both run to completion, what is the *guaranteed* final value of `RaceControl.getTotalOvertakes()`?",
-                options: ["4", "2", "The value is not guaranteed and could be 2, 3, or 4.", "The code will throw an exception."],
-                answer: "The value is not guaranteed and could be 2, 3, or 4."
-            },
-            {
-                question: "How could you modify `RaceControl` to make `recordOvertake()` thread-safe and guarantee the correct final count?",
-                options: ["Make the `totalOvertakes` variable `volatile`.", "Add the `synchronized` keyword to the `recordOvertake` method signature.", "Replace `int` with `String` for `totalOvertakes`.", "The method is already thread-safe."],
-                answer: "Add the `synchronized` keyword to the `recordOvertake` method signature."
-            },
-            {
-                question: "In the `RaceCar.run()` method, what is the primary purpose of calling `Thread.sleep(5)`?",
-                options: ["To permanently stop the thread.", "To ensure this thread finishes before any others can start.", "To pause the thread's execution briefly, making a race condition more likely to be observable.", "To increase the car's speed directly."],
-                answer: "To pause the thread's execution briefly, making a race condition more likely to be observable."
-            }
+            { question: "After a single `RaceCar` task is executed completely by one thread, what will be the final speed of its associated `Car` object?", options: ["30", "20", "10", "0"], answer: "30" },
+            { question: "Which of the following lines of code would cause a compilation error if added to a main method?", options: ["Car myCar = new Car(\"Test\");", "Vehicle myVehicle = new Car(\"Test\");", "new Thread(new RaceCar(new Car(\"Test\"))).start();", "Vehicle v = new Vehicle(\"Test\");"], answer: "Vehicle v = new Vehicle(\"Test\");" },
+            { question: "If two separate threads are created, each with its own `RaceCar` task, and both run to completion, what is the *guaranteed* final value of `RaceControl.getTotalOvertakes()`?", options: ["4", "2", "The value is not guaranteed and could be 2, 3, or 4.", "The code will throw an exception."], answer: "The value is not guaranteed and could be 2, 3, or 4." },
+            { question: "How could you modify `RaceControl` to make `recordOvertake()` thread-safe and guarantee the correct final count?", options: ["Make the `totalOvertakes` variable `volatile`.", "Add the `synchronized` keyword to the `recordOvertake` method signature.", "Replace `int` with `String` for `totalOvertakes`.", "The method is already thread-safe."], answer: "Add the `synchronized` keyword to the `recordOvertake` method signature." },
+            { question: "In the `RaceCar.run()` method, what is the primary purpose of calling `Thread.sleep(5)`?", options: ["To permanently stop the thread.", "To ensure this thread finishes before any others can start.", "To pause the thread's execution briefly, making a race condition more likely to be observable.", "To increase the car's speed directly."], answer: "To pause the thread's execution briefly, making a race condition more likely to be observable." }
         ];
+
+        // --- NEW: SYSTEM DESIGN QUESTION BANK ---
+        const systemDesignQuestions = [
+            { question: "Examine the provided architecture diagram. If the **Redis Cache** cluster experiences a total failure, what is the most immediate and critical impact on the system?", options: ["Users will be unable to log in because the API Gateway will fail.", "The **PostgreSQL DB** will experience a sudden, massive increase in read load, potentially causing system-wide slowdowns.", "The **Message Broker** will stop processing background jobs.", "Static assets like images and CSS will fail to load for users."], answer: "The PostgreSQL DB will experience a sudden, massive increase in read load, potentially causing system-wide slowdowns." },
+            { question: "In the diagram, a user's request to update their profile goes through the API Gateway to `Service A`. `Service A` then publishes a `PROFILE_UPDATED` event to the Message Broker. Why is this asynchronous approach preferable to `Service A` directly calling `Service B` and `Service C` via HTTP?", options: ["It guarantees that Service B and C will process the update faster.", "It reduces the response time for the user, as Service A doesn't have to wait for B and C to complete their tasks.", "It is the only way to ensure transactional integrity across all three services.", "It uses less overall server memory."], answer: "It reduces the response time for the user, as Service A doesn't have to wait for B and C to complete their tasks." },
+            { question: "To improve resilience, you need to prevent a single point of failure. Looking at the diagram, which component represents the most significant single point of failure for handling incoming user traffic?", options: ["A single instance of Service B.", "The PostgreSQL DB.", "The Load Balancer.", "The Redis Cache."], answer: "The Load Balancer." },
+            { question: "The business decides to add a real-time chat feature. Which of the following is the most appropriate technology to facilitate communication between the user's browser and `Service C` (the new Chat Service) for this purpose?", options: ["Standard RESTful HTTP calls from the browser every 1 second.", "A persistent WebSocket connection.", "Sending emails via a third-party service.", "Storing chat messages in the PostgreSQL DB for the browser to query."], answer: "A persistent WebSocket connection." }
+        ];
+
+        // --- NEW: ADVANCED JAVA QUESTION BANK ---
+        const advancedJavaQuestions = [
+            { question: `Consider the following Java code:
+<pre class='bg-gray-100 p-3 rounded text-sm'>
+public class Counter {
+    private volatile int count = 0;
+    public void increment() {
+        count++; // This is not an atomic operation
+    }
+}
+</pre>
+If 100 threads call the \`increment()\` method 100 times each, what is the guaranteed final value of \`count\`?`, options: ["Exactly 10,000.", "The value is not guaranteed and will likely be less than 10,000.", "The code will throw an `IllegalMonitorStateException` because `volatile` is not enough.", "Exactly 0."], answer: "The value is not guaranteed and will likely be less than 10,000." },
+            { question: "You need to perform two independent network calls and combine their results. Which modern Java feature is best suited for this asynchronous task?", options: ["Creating two new `Thread` objects and using `thread.join()`.", "Using a `synchronized` block to ensure one call finishes before the next.", "Using `CompletableFuture.supplyAsync()` for each call and combining them with `thenCombine()`.", "Using a `java.util.Timer` to schedule the tasks."], answer: "Using `CompletableFuture.supplyAsync()` for each call and combining them with `thenCombine()`." },
+            { question: "In the context of the Java Memory Model, what problem does the `final` keyword solve when used on fields of an object that will be shared between threads?", options: ["It ensures the object can never be garbage collected.", "It makes all methods on the object `synchronized` by default.", "It prevents memory leaks by closing resources automatically.", "It guarantees safe publication; once the constructor completes, all threads will see the correctly initialized `final` fields without extra synchronization."], answer: "It guarantees safe publication; once the constructor completes, all threads will see the correctly initialized `final` fields without extra synchronization." }
+        ];
+
 
         // --- DOM Elements ---
         const loginScreen = document.getElementById('login-screen');
@@ -338,31 +332,47 @@ public class RaceCar implements Runnable {
             }
             loginError.textContent = '';
             currentQuestionIndex = 0;
-            
-            // --- MODIFIED LOGIC FOR 35 QUESTIONS ---
-            // 1. Select 25 random general questions
-            let allGeneralQuestions = [...questionBank];
-            shuffleArray(allGeneralQuestions);
-            const generalQuestions = allGeneralQuestions.slice(0, 25);
 
-            // 2. Select 5 random Java questions
-            let allJavaQuestions = [...javaQuestionBank];
-            shuffleArray(allJavaQuestions);
-            const javaQuestions = allJavaQuestions.slice(0, 5);
-
-            // 3. Prepare the 5 scenario-based questions by prepending the code
-            const scenarioQuestions = scenarioCodingQuestionBank.map(q => {
-                // Return a new object to avoid modifying the original bank
-                return { 
-                    ...q, 
-                    question: javaScenarioCode + q.question 
+            // --- NEW LOGIC FOR SENIOR-LEVEL QUIZ (TOTAL 35 QUESTIONS) ---
+            // 1. All 4 System Design questions (prepending the diagram)
+            const designQuestions = systemDesignQuestions.map(q => {
+                return {
+                    ...q,
+                    question: `<h3 class='text-md font-semibold text-gray-700 mb-2'>Analyze the architecture diagram below:</h3><img src='${document.getElementById('system-diagram').src}' alt='System Architecture Diagram' class='w-full rounded-md border my-4' /><hr class="my-4">` + q.question
                 };
             });
 
-            // 4. Combine and shuffle the final question list
-            shuffledQuestions = [...generalQuestions, ...javaQuestions, ...scenarioQuestions];
+            // 2. All 5 Java Scenario questions
+            const scenarioQuestions = scenarioCodingQuestionBank.map(q => {
+                return {
+                    ...q,
+                    question: javaScenarioCode + q.question
+                };
+            });
+            
+            // 3. All 3 advanced Java questions
+            let allAdvancedJava = [...advancedJavaQuestions];
+            
+            // 4. Select 13 random general questions (OS, DB, etc.)
+            let allGeneralQuestions = [...questionBank];
+            shuffleArray(allGeneralQuestions);
+            const selectedGeneral = allGeneralQuestions.slice(0, 13);
+            
+            // 5. Select 10 random basic Java questions
+            let allJavaQuestions = [...javaQuestionBank];
+            shuffleArray(allJavaQuestions);
+            const selectedJava = allJavaQuestions.slice(0, 10);
+
+            // 6. Combine and shuffle the final question list
+            shuffledQuestions = [
+                ...designQuestions, 
+                ...scenarioQuestions,
+                ...allAdvancedJava,
+                ...selectedGeneral,
+                ...selectedJava
+            ];
             shuffleArray(shuffledQuestions);
-            // --- END MODIFIED LOGIC ---
+            // --- END NEW LOGIC ---
 
             userAnswers = new Array(shuffledQuestions.length).fill(null);
             totalQuestionsEl.textContent = shuffledQuestions.length;
@@ -379,7 +389,8 @@ public class RaceCar implements Runnable {
             optionsContainer.innerHTML = '';
             question.options.forEach(option => {
                 const button = document.createElement('button');
-                button.innerHTML = option;
+                // Use innerHTML to correctly render potential code snippets in options
+                button.innerHTML = option.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 button.classList.add('w-full', 'p-4', 'text-left', 'border', 'border-gray-300', 'rounded-lg', 'option-btn');
                 if (option === userAnswers[currentQuestionIndex]) {
                     button.classList.add('selected');
@@ -392,7 +403,8 @@ public class RaceCar implements Runnable {
 
         function selectAnswer(selectedOption) {
             userAnswers[currentQuestionIndex] = selectedOption;
-            displayQuestion();
+            // Re-render to show selection, then auto-advance if preferred
+            displayQuestion(); 
         }
 
         function updateNavigationButtons() {
@@ -435,13 +447,13 @@ public class RaceCar implements Runnable {
                 const resultItem = document.createElement('div');
                 resultItem.classList.add('p-4', 'rounded-lg', isCorrect ? 'bg-green-50' : 'bg-red-50', 'border', isCorrect ? 'border-green-200' : 'border-red-200');
                 
-                // For results, we strip the code block to keep it clean
-                const questionOnly = question.question.substring(question.question.indexOf('<hr '));
-                
+                // For results, strip HTML to keep it clean, but show the core question text
+                const plainTextQuestion = question.question.replace(/<[^>]*>?/gm, ' ').replace(/Analyze the architecture diagram below:/g, '').trim();
+
                 resultItem.innerHTML = `
-                    <p class="font-bold text-gray-800">${index + 1}. ${questionOnly}</p>
-                    <p class="mt-2 text-sm ${isCorrect ? 'text-green-700' : 'text-red-700'}">Your answer: <span class="font-semibold">${userAnswer || 'Not answered'}</span></p>
-                    ${!isCorrect ? `<p class="mt-1 text-sm text-green-800">Correct answer: <span class="font-semibold">${question.answer}</span></p>` : ''}
+                    <p class="font-bold text-gray-800">${index + 1}. ${plainTextQuestion}</p>
+                    <p class="mt-2 text-sm ${isCorrect ? 'text-green-700' : 'text-red-700'}">Your answer: <span class="font-semibold">${(userAnswer || 'Not answered').replace(/</g, "&lt;")}</span></p>
+                    ${!isCorrect ? `<p class="mt-1 text-sm text-green-800">Correct answer: <span class="font-semibold">${question.answer.replace(/</g, "&lt;")}</span></p>` : ''}
                 `;
                 detailedResultsEl.appendChild(resultItem);
             });
@@ -458,7 +470,7 @@ public class RaceCar implements Runnable {
         }
 
         function generateTxtFile() {
-            let fileContent = "Technical Concepts Quiz Results\n";
+            let fileContent = "Senior Technical Concepts Quiz Results\n";
             fileContent += "=================================\n\n";
             fileContent += `Name: ${nameInput.value}\n`;
             fileContent += `Company ID: ${companyIdInput.value}\n\n`;
@@ -473,7 +485,7 @@ public class RaceCar implements Runnable {
                 const userAnswer = userAnswers[index] || "Not answered";
                 const isCorrect = userAnswer === question.answer;
                 // Strip all HTML tags for the text file
-                const plainTextQuestion = question.question.replace(/<[^>]*>?/gm, '');
+                const plainTextQuestion = question.question.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
                 fileContent += `Question ${index + 1}: ${plainTextQuestion}\n`;
                 fileContent += `Your Answer: ${userAnswer}\n`;
                 if (!isCorrect) {
