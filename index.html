@@ -27,15 +27,13 @@
             <div class="space-y-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., Jane Doe">
+                    <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="e.g., Jane Doe">
                 </div>
                 <div>
                     <label for="companyId" class="block text-sm font-medium text-gray-700 mb-1">Company ID</label>
-                    <input type="text" id="companyId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., EMP12345">
+                    <input type="text" id="companyId" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="e.g., EMP12345">
                 </div>
-                <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105">
-                    Start Quiz
-                </button>
+                <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700">Start Quiz</button>
             </div>
             <p id="login-error" class="text-red-500 text-center mt-4 h-4"></p>
         </div>
@@ -45,7 +43,7 @@
                 <h2 class="text-2xl font-bold text-gray-800">Question <span id="question-number"></span>/<span id="total-questions"></span></h2>
                 <div id="timer" class="text-lg font-semibold text-blue-600 tabular-nums">30:00</div>
             </div>
-            <div id="question-container">
+            <div id="question-area">
                 <div id="question-text" class="text-lg text-gray-800 mb-6 leading-relaxed"></div>
                 <div id="code-comparison-container" class="mb-6"></div>
                 <div id="options-container" class="space-y-3"></div>
@@ -60,9 +58,9 @@
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Quiz Completed!</h1>
             <p class="text-center text-gray-500 mb-6">Here is your performance summary.</p>
             <div class="bg-gray-50 p-6 rounded-lg mb-6 text-center">
-                <p class="text-lg text-gray-700"><strong>Name:</strong> <span id="result-name"></span></p>
-                <p class="text-lg text-gray-700"><strong>Company ID:</strong> <span id="result-companyId"></span></p>
-                <p class="text-lg text-gray-700"><strong>Time Taken:</strong> <span id="result-time"></span></p>
+                <p><strong>Name:</strong> <span id="result-name"></span></p>
+                <p><strong>Company ID:</strong> <span id="result-companyId"></span></p>
+                <p><strong>Time Taken:</strong> <span id="result-time"></span></p>
             </div>
             <div class="flex justify-around items-center bg-blue-50 p-6 rounded-lg mb-8">
                 <div><p class="text-sm text-blue-800 font-bold">SCORE</p><p class="text-4xl font-bold text-blue-600" id="score"></p></div>
@@ -74,51 +72,60 @@
             <div id="detailed-results" class="space-y-4 mb-8 max-h-96 overflow-y-auto pr-4"></div>
             <div class="flex space-x-4">
                 <button id="restart-btn" class="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700">Try Again</button>
-                <button id="download-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700">Download Results (.txt)</button>
+                <button id="download-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700">Download Results</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // --- STANDARD QUESTION BANKS ---
-        const questionBank = [ { question: "If a running application is like a house (a `process`), what is the best analogy for its `threads`?", options: ["Different people living in the house, sharing the same address and rooms", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address and rooms" }, { question: "What problem does `virtual memory` primarily solve for an application?", options: ["It prevents the application from ever crashing", "It allows an application to act as if it has a vast, private memory space, even if the physical hardware is limited", "It makes the computer's physical RAM faster", "It secures the application from network attacks"], answer: "It allows an application to act as if it has a vast, private memory space, even if the physical hardware is limited" }, { question: "What is a 'context switch' in an operating system?", options: ["Changing the screen resolution", "The process of storing the state of a process or thread so that it can be restored and resume execution later", "Switching between user accounts", "A hardware malfunction"], answer: "The process of storing the state of a process or thread so that it can be restored and resume execution later"}, { question: "A 'deadlock' is a situation where:", options: ["A process terminates unexpectedly", "Two or more processes are blocked forever, each waiting for a resource held by another", "The operating system runs out of memory", "A user enters the wrong password multiple times"], answer: "Two or more processes are blocked forever, each waiting for a resource held by another"}, { question: "While an `index` dramatically speeds up data retrieval (`SELECT`), what is the inherent trade-off?", options: ["It makes the database less secure", "It slightly slows down data modification (`INSERT`, `UPDATE`) because the index must also be updated", "It can only be used on small tables", "It makes `SELECT` statements more complex"], answer: "It slightly slows down data modification (`INSERT`, `UPDATE`) because the index must also be updated" }, { question: "You need a report showing customer names next to their order dates from two separate tables. Which SQL operation is designed for this?", options: ["UNION", "GROUP BY", "JOIN", "ALTER"], answer: "JOIN" }, { question: "What does 'ACID' stand for in the context of database transactions?", options: ["Atomicity, Consistency, Isolation, Durability", "Association, Consistency, Integration, Durability", "Atomicity, Concurrency, Isolation, Durability", "Association, Concurrency, Integration, Durability"], answer: "Atomicity, Consistency, Isolation, Durability"}, { question: "Why is `statelessness` in RESTful APIs important for scalability?", options: ["The server remembers every client's previous requests", "Any server can handle any request because no session history is stored on the server", "It encrypts the application state", "It requires clients to maintain a permanent connection"], answer: "Any server can handle any request because no session history is stored on the server" }, { question: "What is the primary purpose of a CDN (Content Delivery Network)?", options: ["To balance load across application servers", "To distribute static content (like images and videos) to servers closer to the user for faster delivery", "To act as a central database", "To provide a secure entry point to an application"], answer: "To distribute static content (like images and videos) to servers closer to the user for faster delivery"}, { question: "You need to cache user profiles for quick retrieval using a unique username string. What data structure is best?", options: ["Linked List", "Hash Table (or Dictionary)", "Simple Array", "Stack"], answer: "Hash Table (or Dictionary)" }, { question: "An algorithm has `O(1)` (constant) space complexity. What does this mean?", options: ["Memory usage grows with input size", "It requires no memory", "Its memory usage is fixed regardless of input size", "It's faster than O(n) space complexity"], answer: "Its memory usage is fixed regardless of input size" } ];
-        const javaQuestionBank = [ { question: "In Java, what is the primary purpose of an `interface`?", options: ["To provide a concrete implementation of a class", "To allow a class to inherit from multiple parent classes directly", "To define a contract of methods that a class must implement, achieving abstraction", "To store constant variables that cannot be changed"], answer: "To define a contract of methods that a class must implement, achieving abstraction" }, { question: "What is the key difference between `==` and the `.equals()` method when comparing objects in Java?", options: ["There is no difference", "`==` compares content, `.equals()` compares memory address", "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)", "`==` is for primitives, `.equals()` is for objects"], answer: "`==` compares object memory addresses, while `.equals()` is meant to compare their content (if implemented)" }, { question: "In Java, what is the advantage of using a `try-with-resources` statement?", options: ["It makes the code run faster", "It automatically closes resources like streams or connections, preventing resource leaks", "It allows for more than one `catch` block", "It converts checked exceptions to unchecked exceptions"], answer: "It automatically closes resources like streams or connections, preventing resource leaks" }, { question: "Which of these collections in Java does not allow duplicate elements and is unordered?", options: ["ArrayList", "LinkedList", "HashSet", "TreeMap"], answer: "HashSet" }, { question: "What is the difference between a `checked exception` and an `unchecked exception` in Java?", options: ["Checked exceptions must be handled at compile-time, while unchecked exceptions are runtime errors", "Unchecked exceptions are more severe than checked exceptions", "There is no functional difference", "Checked exceptions only occur in multi-threaded code"], answer: "Checked exceptions must be handled at compile-time, while unchecked exceptions are runtime errors" }, { question: "What will happen if you declare a method as `static` in a Java class?", options: ["The method can only be called on an instance of the class", "The method can be called without creating an instance of the class", "The method cannot be overridden by subclasses", "The method becomes abstract"], answer: "The method can be called without creating an instance of the class" }, { question: "If a class is declared as `abstract`, what is true?", options: ["You must create an instance of it", "It cannot have any concrete (non-abstract) methods", "It cannot be instantiated directly and may contain abstract methods", "It must extend another abstract class"], answer: "It cannot be instantiated directly and may contain abstract methods" }];
-        const systemDesignQuestions = [ { question: "If a primary caching layer (like Redis) experiences a total failure, what is the most immediate and critical impact on a typical web application system?", options: ["The database will experience a massive increase in read load, potentially causing system-wide slowdowns.", "The application's background job processor will stop working.", "Users will be unable to log in because the API Gateway will fail.", "Static assets like images and CSS will fail to load for users."], answer: "The database will experience a massive increase in read load, potentially causing system-wide slowdowns." }, { question: "In a microservices architecture, a user update triggers an action in Service A, which then needs to notify Service B and Service C. Why is using a message broker for this communication often preferable to direct HTTP calls from A to B and C?", options: ["It is the only way to ensure transactional integrity across all three services.", "It guarantees that Service B and C will process the update faster.", "It reduces the response time for the user, as Service A doesn't have to wait for B and C to complete their tasks.", "It uses less overall server memory than HTTP calls."], answer: "It reduces the response time for the user, as Service A doesn't have to wait for B and C to complete their tasks." }];
+<script>
+    // --- QUESTION BANKS ---
 
-        // --- NEW: CODE OPTIMIZATION QUESTION BANK ---
-        const codeOptimizationQuestions = [
-            {
-                type: 'code-comparison',
-                question: "Which of the following Java methods for building a long string is more optimized, and why?",
-                snippets: {
-                    optionA: `// Option A\npublic String buildString(String[] words) {\n    String result = "";\n    for (String word : words) {\n        result += " " + word;\n    }\n    return result;\n}`,
-                    optionB: `// Option B\npublic String buildString(String[] words) {\n    StringBuilder sb = new StringBuilder();\n    for (String word : words) {\n        sb.append(" ").append(word);\n    }\n    return sb.toString();\n}`
-                },
-                options: [
-                    "Option A is better because it's simpler and uses less memory.",
-                    "Option B is better because `StringBuilder` is mutable, avoiding the creation of many intermediate `String` objects in the loop.",
-                    "Option A is better because the `+` operator is automatically optimized by the Java compiler to be identical to `StringBuilder`.",
-                    "Both are equally performant for any number of words."
-                ],
-                answer: "Option B is better because `StringBuilder` is mutable, avoiding the creation of many intermediate `String` objects in the loop."
+    const generalQuestions = [
+        { type: 'mcq', question: "If a running application is a 'process', what is the best analogy for its 'threads'?", options: ["Different people living in the house, sharing the same address", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address" },
+        { type: 'mcq', question: "What problem does virtual memory primarily solve?", options: ["It prevents application crashes", "It allows an app to act as if it has a vast, private memory space", "It makes physical RAM faster", "It secures the app from network attacks"], answer: "It allows an app to act as if it has a vast, private memory space" },
+        { type: 'mcq', question: "A 'deadlock' is a situation where:", options: ["A process terminates unexpectedly", "Two or more processes are blocked forever, each waiting for a resource held by another", "The OS runs out of memory", "A user enters the wrong password multiple times"], answer: "Two or more processes are blocked forever, each waiting for a resource held by another"},
+        { type: 'mcq', question: "While a database index speeds up data retrieval (`SELECT`), what is the trade-off?", options: ["It makes the database less secure", "It slightly slows down data modification (`INSERT`, `UPDATE`, `DELETE`)", "It can only be used on small tables", "It makes `SELECT` statements more complex"], answer: "It slightly slows down data modification (`INSERT`, `UPDATE`, `DELETE`)" },
+        { type: 'mcq', question: "What does 'ACID' stand for in database transactions?", options: ["Atomicity, Consistency, Isolation, Durability", "Association, Consistency, Integration, Durability", "Atomicity, Concurrency, Isolation, Durability", "Association, Concurrency, Integration, Durability"], answer: "Atomicity, Consistency, Isolation, Durability"},
+        { type: 'mcq', question: "Why is statelessness in RESTful APIs important for scalability?", options: ["The server remembers every client's previous requests", "Any server can handle any request because no session history is stored on the server", "It encrypts the application state", "It requires clients to maintain a permanent connection"], answer: "Any server can handle any request because no session history is stored on the server" },
+        { type: 'mcq', question: "What is the primary purpose of a CDN (Content Delivery Network)?", options: ["To balance load across application servers", "To distribute static content to servers closer to the user for faster delivery", "To act as a central database", "To provide a secure entry point to an application"], answer: "To distribute static content to servers closer to the user for faster delivery"},
+        { type: 'mcq', question: "What data structure provides the fastest average time complexity for checking the existence of an item?", options: ["Linked List", "Hash Table (or HashSet)", "Sorted Array", "Stack"], answer: "Hash Table (or HashSet)" },
+    ];
+
+    const javaQuestions = [
+        { type: 'mcq', question: "What is the key difference between `==` and the `.equals()` method when comparing non-primitive objects in Java?", options: ["There is no difference", "`==` compares content, `.equals()` compares memory address", "`==` compares memory addresses, while `.equals()` is meant to compare content", "`==` is for primitives, `.equals()` is for objects"], answer: "`==` compares memory addresses, while `.equals()` is meant to compare content" },
+        { type: 'mcq', question: "What is the advantage of using a `try-with-resources` statement?", options: ["It makes code run faster", "It automatically closes resources, preventing resource leaks", "It allows for more than one `catch` block", "It converts checked exceptions to unchecked exceptions"], answer: "It automatically closes resources, preventing resource leaks" },
+        { type: 'mcq', question: "Which collection does not allow duplicate elements and is unordered?", options: ["ArrayList", "LinkedList", "HashSet", "TreeMap"], answer: "HashSet" },
+        { type: 'mcq', question: "What is the difference between a `checked` and an `unchecked` exception in Java?", options: ["Checked exceptions must be handled at compile-time", "Unchecked exceptions are more severe", "There is no functional difference", "Checked exceptions only occur in multi-threaded code"], answer: "Checked exceptions must be handled at compile-time" },
+        { type: 'mcq', question: "If a class is declared as `abstract`, what is true?", options: ["You must create an instance of it", "It cannot have any concrete (non-abstract) methods", "It cannot be instantiated directly and may contain abstract methods", "It must extend another abstract class"], answer: "It cannot be instantiated directly and may contain abstract methods" },
+    ];
+
+    const systemDesignQuestions = [
+        { type: 'mcq', question: "If a primary caching layer (e.g., Redis) fails completely, what is the most critical impact on a typical web application?", options: ["The database will experience a massive increase in read load", "The application's background job processor will stop", "Users will be unable to log in", "Static assets like images will fail to load"], answer: "The database will experience a massive increase in read load" },
+        { type: 'mcq', question: "In a microservices architecture, why is using a message broker for inter-service communication often better than direct HTTP calls?", options: ["It guarantees faster processing", "It ensures transactional integrity across services", "It decouples services and improves the user's response time", "It uses less server memory than HTTP"], answer: "It decouples services and improves the user's response time" },
+    ];
+
+    const codeOptimizationQuestions = [
+        {
+            type: 'code-comparison',
+            question: "Which Java method for building a long string is more optimized, and why?",
+            snippets: {
+                optionA: `// Option A\npublic String buildString(String[] words) {\n    String result = "";\n    for (String word : words) {\n        result += " " + word;\n    }\n    return result;\n}`,
+                optionB: `// Option B\npublic String buildString(String[] words) {\n    StringBuilder sb = new StringBuilder();\n    for (String word : words) {\n        sb.append(" ").append(word);\n    }\n    return sb.toString();\n}`
             },
-            {
-                type: 'code-comparison',
-                question: "For checking if a large collection of unique IDs contains a specific ID, which approach is more performant and why?",
-                snippets: {
-                    optionA: `// Option A\n// Pre-computation: ids are stored in an ArrayList\nList<String> idList = new ArrayList<>(...);\n\n// Check for existence\nboolean exists = idList.contains("some-id");`,
-                    optionB: `// Option B\n// Pre-computation: ids are stored in a HashSet\nSet<String> idSet = new HashSet<>(...);\n\n// Check for existence\nboolean exists = idSet.contains("some-id");`
-                },
-                options: [
-                    "Option A (`ArrayList`) is faster because it uses a contiguous block of memory.",
-                    "Both have the same O(n) time complexity for the `.contains()` check.",
-                    "Option B (`HashSet`) is faster because its `.contains()` check has an average time complexity of O(1), compared to O(n) for an `ArrayList`.",
-                    "Option B (`HashSet`) is faster only if the IDs are sorted first."
-                ],
-                answer: "Option B (`HashSet`) is faster because its `.contains()` check has an average time complexity of O(1), compared to O(n) for an `ArrayList`."
+            options: [
+                "Option A is better because it's simpler and uses less memory.",
+                "Option B is better because `StringBuilder` is mutable, avoiding the creation of many intermediate String objects.",
+                "Option A is better because the `+` operator is automatically optimized by the Java compiler to be identical to `StringBuilder`.",
+                "Both are equally performant for any number of words."
+            ],
+            answer: "Option B is better because `StringBuilder` is mutable, avoiding the creation of many intermediate String objects."
+        },
+        {
+            type: 'code-comparison',
+            question: "To fetch posts and their authors, which approach avoids the 'N+1 query problem'?",
+            snippets: {
+                optionA: `// Option A: Fetch posts, then loop to fetch each author\nList<Post> posts = postRepo.findAll();\nfor (Post post : posts) {\n    Author author = authorRepo.findById(post.getAuthorId());\n    post.setAuthor(author);\n}`,
+                optionB: `// Option B: Fetch posts and authors in a single query\n@Query("SELECT p, a FROM Post p JOIN p.author a")\nList<Post> findPostsAndAuthors();\n\nList<Post> posts = postRepo.findPostsAndAuthors();`
             },
-            {
-                type: 'code-comparison',
-                question: "To fetch posts and their authors from a database, which approach is more optimized to avoid the 'N+1 query problem'?",
-                snippets: {
-                    optionA: `// Option A: Fetch posts, then loop to fetch each author\nList<Post> posts = postRepo.findAll();\nfor (Post post : posts) {\n
+            options: [
+                "Option A is better because it's
