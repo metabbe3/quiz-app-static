@@ -21,23 +21,25 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div class="w-full max-w-4xl mx-auto">
+        <!-- Login Screen -->
         <div id="login-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Senior Technical Concepts Quiz</h1>
-            <p class="text-center text-gray-500 mb-8">You will have 30 minutes to complete 35 questions. Good luck!</p>
+            <p id="quiz-intro" class="text-center text-gray-500 mb-8">You will have 30 minutes to complete the quiz. Good luck!</p>
             <div class="space-y-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="e.g., Jane Doe">
+                    <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., Jane Doe">
                 </div>
                 <div>
                     <label for="companyId" class="block text-sm font-medium text-gray-700 mb-1">Company ID</label>
-                    <input type="text" id="companyId" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="e.g., EMP12345">
+                    <input type="text" id="companyId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., EMP12345">
                 </div>
-                <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700">Start Quiz</button>
+                <button id="start-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">Start Quiz</button>
             </div>
             <p id="login-error" class="text-red-500 text-center mt-4 h-4"></p>
         </div>
 
+        <!-- Quiz Screen -->
         <div id="quiz-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container hidden">
             <div id="quiz-header" class="flex justify-between items-center border-b pb-4 mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Question <span id="question-number"></span>/<span id="total-questions"></span></h2>
@@ -49,11 +51,12 @@
                 <div id="options-container" class="space-y-3"></div>
             </div>
             <div class="flex justify-between mt-8">
-                <button id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300">Previous</button>
-                <button id="next-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">Next</button>
+                <button id="prev-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Previous</button>
+                <button id="next-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors">Next</button>
             </div>
         </div>
 
+        <!-- Results Screen -->
         <div id="results-screen" class="bg-white p-8 rounded-xl shadow-lg quiz-container hidden">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Quiz Completed!</h1>
             <p class="text-center text-gray-500 mb-6">Here is your performance summary.</p>
@@ -69,10 +72,11 @@
                 <div class="w-px bg-blue-200 h-16"></div>
                 <div><p class="text-sm text-red-800 font-bold">INCORRECT</p><p class="text-4xl font-bold text-red-600" id="incorrect-answers"></p></div>
             </div>
-            <div id="detailed-results" class="space-y-4 mb-8 max-h-96 overflow-y-auto pr-4"></div>
+            <h3 class="text-xl font-bold text-gray-700 mb-4">Detailed Review</h3>
+            <div id="detailed-results" class="space-y-4 mb-8 max-h-96 overflow-y-auto pr-4 border rounded-lg p-4 bg-gray-50"></div>
             <div class="flex space-x-4">
-                <button id="restart-btn" class="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700">Try Again</button>
-                <button id="download-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700">Download Results</button>
+                <button id="restart-btn" class="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors">Try Again</button>
+                <button id="download-btn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-colors">Download Results</button>
             </div>
         </div>
     </div>
@@ -81,27 +85,114 @@
     // --- QUESTION BANKS ---
 
     const generalQuestions = [
-        { type: 'mcq', question: "If a running application is a 'process', what is the best analogy for its 'threads'?", options: ["Different people living in the house, sharing the same address", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address" },
-        { type: 'mcq', question: "What problem does virtual memory primarily solve?", options: ["It prevents application crashes", "It allows an app to act as if it has a vast, private memory space", "It makes physical RAM faster", "It secures the app from network attacks"], answer: "It allows an app to act as if it has a vast, private memory space" },
-        { type: 'mcq', question: "A 'deadlock' is a situation where:", options: ["A process terminates unexpectedly", "Two or more processes are blocked forever, each waiting for a resource held by another", "The OS runs out of memory", "A user enters the wrong password multiple times"], answer: "Two or more processes are blocked forever, each waiting for a resource held by another"},
-        { type: 'mcq', question: "While a database index speeds up data retrieval (`SELECT`), what is the trade-off?", options: ["It makes the database less secure", "It slightly slows down data modification (`INSERT`, `UPDATE`, `DELETE`)", "It can only be used on small tables", "It makes `SELECT` statements more complex"], answer: "It slightly slows down data modification (`INSERT`, `UPDATE`, `DELETE`)" },
-        { type: 'mcq', question: "What does 'ACID' stand for in database transactions?", options: ["Atomicity, Consistency, Isolation, Durability", "Association, Consistency, Integration, Durability", "Atomicity, Concurrency, Isolation, Durability", "Association, Concurrency, Integration, Durability"], answer: "Atomicity, Consistency, Isolation, Durability"},
-        { type: 'mcq', question: "Why is statelessness in RESTful APIs important for scalability?", options: ["The server remembers every client's previous requests", "Any server can handle any request because no session history is stored on the server", "It encrypts the application state", "It requires clients to maintain a permanent connection"], answer: "Any server can handle any request because no session history is stored on the server" },
-        { type: 'mcq', question: "What is the primary purpose of a CDN (Content Delivery Network)?", options: ["To balance load across application servers", "To distribute static content to servers closer to the user for faster delivery", "To act as a central database", "To provide a secure entry point to an application"], answer: "To distribute static content to servers closer to the user for faster delivery"},
-        { type: 'mcq', question: "What data structure provides the fastest average time complexity for checking the existence of an item?", options: ["Linked List", "Hash Table (or HashSet)", "Sorted Array", "Stack"], answer: "Hash Table (or HashSet)" },
+        { type: 'mcq', question: "If a running application is a 'process', what is the best analogy for its 'threads'?", options: ["Different people living in the house, sharing the same address", "Separate, identical houses built next to each other", "The single blueprint used to build the house", "The electricity and water utilities"], answer: "Different people living in the house, sharing the same address", explanation: "Threads within a process share the same memory space (the house address) but execute independently (different people), making it an efficient way to handle concurrent tasks." },
+        { type: 'mcq', question: "What problem does virtual memory primarily solve?", options: ["It prevents application crashes", "It allows an app to act as if it has a vast, private memory space", "It makes physical RAM faster", "It secures the app from network attacks"], answer: "It allows an app to act as if it has a vast, private memory space", explanation: "Virtual memory abstracts the physical RAM, giving each process its own isolated address space. This prevents processes from interfering with each other and allows the OS to manage memory more effectively, even using disk space as an extension of RAM." },
+        { type: 'mcq', question: "A 'deadlock' is a situation where:", options: ["A process terminates unexpectedly", "Two or more processes are blocked forever, each waiting for a resource held by another", "The OS runs out of memory", "A user enters the wrong password multiple times"], answer: "Two or more processes are blocked forever, each waiting for a resource held by another", explanation: "A deadlock occurs when two or more processes are stuck in a circular wait, each holding a resource the other needs, preventing any of them from proceeding. It's a classic concurrency problem." },
+        { type: 'mcq', question: "What does 'ACID' stand for in database transactions?", options: ["Atomicity, Consistency, Isolation, Durability", "Association, Consistency, Integration, Durability", "Atomicity, Concurrency, Isolation, Durability", "Association, Concurrency, Integration, Durability"], answer: "Atomicity, Consistency, Isolation, Durability", explanation: "ACID properties guarantee database reliability. Atomicity (all or nothing), Consistency (valid state to valid state), Isolation (transactions don't interfere), and Durability (committed data survives failures)." },
+        { type: 'mcq', question: "Why is statelessness in RESTful APIs important for scalability?", options: ["The server remembers every client's previous requests", "Any server can handle any request because no session history is stored on the server", "It encrypts the application state", "It requires clients to maintain a permanent connection"], answer: "Any server can handle any request because no session history is stored on the server", explanation: "In a stateless design, each request contains all the information the server needs to fulfill it. This means any server in a cluster can handle the request, making it easy to add more servers (scale horizontally) without worrying about session affinity." },
     ];
 
     const javaQuestions = [
-        { type: 'mcq', question: "What is the key difference between `==` and the `.equals()` method when comparing non-primitive objects in Java?", options: ["There is no difference", "`==` compares content, `.equals()` compares memory address", "`==` compares memory addresses, while `.equals()` is meant to compare content", "`==` is for primitives, `.equals()` is for objects"], answer: "`==` compares memory addresses, while `.equals()` is meant to compare content" },
-        { type: 'mcq', question: "What is the advantage of using a `try-with-resources` statement?", options: ["It makes code run faster", "It automatically closes resources, preventing resource leaks", "It allows for more than one `catch` block", "It converts checked exceptions to unchecked exceptions"], answer: "It automatically closes resources, preventing resource leaks" },
-        { type: 'mcq', question: "Which collection does not allow duplicate elements and is unordered?", options: ["ArrayList", "LinkedList", "HashSet", "TreeMap"], answer: "HashSet" },
-        { type: 'mcq', question: "What is the difference between a `checked` and an `unchecked` exception in Java?", options: ["Checked exceptions must be handled at compile-time", "Unchecked exceptions are more severe", "There is no functional difference", "Checked exceptions only occur in multi-threaded code"], answer: "Checked exceptions must be handled at compile-time" },
-        { type: 'mcq', question: "If a class is declared as `abstract`, what is true?", options: ["You must create an instance of it", "It cannot have any concrete (non-abstract) methods", "It cannot be instantiated directly and may contain abstract methods", "It must extend another abstract class"], answer: "It cannot be instantiated directly and may contain abstract methods" },
+        { type: 'mcq', question: "What is the key difference between `==` and the `.equals()` method when comparing non-primitive objects in Java?", options: ["There is no difference", "`==` compares content, `.equals()` compares memory address", "`==` compares memory addresses, while `.equals()` is meant to compare content", "`==` is for primitives, `.equals()` is for objects"], answer: "`==` compares memory addresses, while `.equals()` is meant to compare content", explanation: "The `==` operator checks if two references point to the exact same object in memory (reference equality). The `.equals()` method, when properly overridden, checks if two objects are meaningfully equivalent (content equality)." },
+        { type: 'mcq', question: "What is the advantage of using a `try-with-resources` statement?", options: ["It makes code run faster", "It automatically closes resources, preventing resource leaks", "It allows for more than one `catch` block", "It converts checked exceptions to unchecked exceptions"], answer: "It automatically closes resources, preventing resource leaks", explanation: "The `try-with-resources` statement ensures that each resource (like a file stream or database connection) is closed at the end of the statement, which is crucial for preventing resource leaks and making code cleaner." },
+        { type: 'mcq', question: "Which collection does not allow duplicate elements and is unordered?", options: ["ArrayList", "LinkedList", "HashSet", "TreeMap"], answer: "HashSet", explanation: "`HashSet` is an implementation of the `Set` interface. By definition, a Set cannot contain duplicate elements. It uses a hash table for storage, which does not maintain the insertion order of elements." },
+        { type: 'mcq', question: "What is the difference between a `checked` and an `unchecked` exception in Java?", options: ["Checked exceptions must be handled at compile-time", "Unchecked exceptions are more severe", "There is no functional difference", "Checked exceptions only occur in multi-threaded code"], answer: "Checked exceptions must be handled at compile-time", explanation: "Checked exceptions (subclasses of Exception but not RuntimeException) must be declared or handled in a try-catch block. Unchecked exceptions (subclasses of RuntimeException) do not have this compile-time requirement and usually indicate programming errors." },
     ];
 
-    const systemDesignQuestions = [
-        { type: 'mcq', question: "If a primary caching layer (e.g., Redis) fails completely, what is the most critical impact on a typical web application?", options: ["The database will experience a massive increase in read load", "The application's background job processor will stop", "Users will be unable to log in", "Static assets like images will fail to load"], answer: "The database will experience a massive increase in read load" },
-        { type: 'mcq', question: "In a microservices architecture, why is using a message broker for inter-service communication often better than direct HTTP calls?", options: ["It guarantees faster processing", "It ensures transactional integrity across services", "It decouples services and improves the user's response time", "It uses less server memory than HTTP"], answer: "It decouples services and improves the user's response time" },
+    const oopQuestions = [
+        { type: 'mcq', question: "The ability of an object to take on many forms is a core concept of which OOP principle?", options: ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction"], answer: "Polymorphism", explanation: "Polymorphism allows objects of different classes to be treated as objects of a common superclass. This is often seen in method overriding, where the specific method that gets called is determined at runtime based on the actual object type." },
+        { type: 'mcq', question: "What is the primary purpose of encapsulation?", options: ["To allow a class to use methods from another class", "To prevent a class from being instantiated", "To bundle data and the methods that operate on that data, and restrict direct access", "To create a 'is-a' relationship between classes"], answer: "To bundle data and the methods that operate on that data, and restrict direct access", explanation: "Encapsulation hides the internal state of an object and requires all interaction to be performed through an object's methods. This protects data integrity and makes code more modular." },
+        { type: 'mcq', question: "What is the main difference between an Abstract Class and an Interface in Java?", options: ["An abstract class can have constructors, while an interface cannot.", "An interface can have instance variables, while an abstract class cannot.", "A class can implement multiple abstract classes but only extend one interface.", "Interfaces are for 'is-a' relationships, abstract classes are for 'has-a' relationships."], answer: "An abstract class can have constructors, while an interface cannot.", explanation: "Abstract classes can have constructors (which are called when a concrete subclass is instantiated), instance variables, and non-abstract methods. Interfaces are purely abstract, cannot be instantiated, and cannot have constructors or instance variables (only static final constants)." },
+        { type: 'mcq', question: "Method overriding is an example of which type of polymorphism?", options: ["Compile-time (or Static) Polymorphism", "Runtime (or Dynamic) Polymorphism", "Ad-hoc Polymorphism", "Parametric Polymorphism"], answer: "Runtime (or Dynamic) Polymorphism", explanation: "Method overriding is a form of runtime polymorphism because the decision of which version of the method to call is made at runtime by the JVM, based on the actual type of the object." },
+        { type: 'mcq', question: "In OOP, a 'constructor' is a special method that is used to:", options: ["Destroy an object", "Initialize the state of a newly created object", "Perform a deep copy of an object", "Return the memory address of an object"], answer: "Initialize the state of a newly created object", explanation: "A constructor is called automatically when an object is created using the `new` keyword. Its purpose is to set the initial values of the object's fields." },
+    ];
+
+    const dataStructuresAndAlgorithmsQuestions = [
+        { type: 'mcq', question: "What data structure operates on a Last-In, First-Out (LIFO) principle?", options: ["Queue", "Linked List", "Stack", "Tree"], answer: "Stack", explanation: "A Stack is like a stack of plates; the last item you add is the first one you remove. This LIFO behavior is fundamental to its operation." },
+        { type: 'mcq', question: "What is the average time complexity for searching for an element in a Hash Table?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], answer: "O(1)", explanation: "On average, a hash table provides constant time complexity for insertions, deletions, and lookups because the hash function directly computes the location of the element. The worst-case is O(n) if all elements hash to the same bucket." },
+        { type: 'mcq', question: "What is the worst-case time complexity of the Quicksort algorithm?", options: ["O(n log n)", "O(log n)", "O(n)", "O(n^2)"], answer: "O(n^2)", explanation: "While Quicksort's average time complexity is an efficient O(n log n), its worst-case performance is O(n^2). This occurs when the pivot elements are poorly chosen, such as on an already sorted array." },
+        { type: 'mcq', question: "Which of the following is the best data structure to use for implementing a priority queue?", options: ["Stack", "Linked List", "Heap", "Hash Table"], answer: "Heap", explanation: "A Heap (specifically a min-heap or max-heap) is a tree-based data structure that satisfies the heap property, making it highly efficient for finding and extracting the highest (or lowest) priority element." },
+        { type: 'mcq', question: "When is it more advantageous to use a Linked List over an Array?", options: ["When you need frequent random access to elements", "When you have a fixed number of elements", "When you need frequent insertions and deletions at the beginning or middle of the list", "When memory locality is critical for performance"], answer: "When you need frequent insertions and deletions at the beginning or middle of the list", explanation: "Arrays require shifting elements during insertion/deletion (O(n)), while linked lists only require updating pointers (O(1)), making them superior for dynamic lists that change size frequently." },
+        { type: 'mcq', question: "A binary search algorithm can only be applied to:", options: ["Any array of numbers", "A sorted array", "A linked list", "An array with an even number of elements"], answer: "A sorted array", explanation: "Binary search works by repeatedly dividing the search interval in half. This 'divide and conquer' strategy relies on the elements being sorted to know which half to discard." },
+        { type: 'mcq', question: "What does 'space complexity' of an algorithm refer to?", options: ["The number of lines of code", "The time it takes to run", "The amount of memory it requires to run to completion", "The number of CPU cycles it consumes"], answer: "The amount of memory it requires to run to completion", explanation: "Space complexity quantifies the amount of memory an algorithm uses in relation to the size of its input. It's a measure of memory efficiency." },
+        { type: 'mcq', question: "In Big O notation, what does O(log n) signify?", options: ["Constant time complexity", "Linear time complexity", "Logarithmic time complexity", "Exponential time complexity"], answer: "Logarithmic time complexity", explanation: "O(log n) means the time taken increases logarithmically with the input size. Algorithms that repeatedly halve the input size, like binary search, exhibit this highly efficient complexity." },
+    ];
+
+    const databaseAndScalabilityQuestions = [
+        { type: 'mcq', question: "While a database index speeds up data retrieval (`SELECT`), what is the trade-off?", options: ["It makes the database less secure", "It slightly slows down data modification (`INSERT`, `UPDATE`, `DELETE`)", "It can only be used on small tables", "It makes `SELECT` statements more complex"], answer: "It slightly slows down data modification (`INSERT`, `UPDATE`, `DELETE`)", explanation: "Every time data is inserted, updated, or deleted, the database must also update the index. This adds a small amount of overhead to write operations in exchange for much faster read operations." },
+        { type: 'mcq', question: "What type of SQL `JOIN` returns all records from the left table, and the matched records from the right table?", options: ["INNER JOIN", "RIGHT JOIN", "FULL OUTER JOIN", "LEFT JOIN"], answer: "LEFT JOIN", explanation: "A LEFT JOIN (or LEFT OUTER JOIN) ensures that every row from the left table is included in the result set. If there's no match in the right table, the right-side columns will be NULL." },
+        { type: 'mcq', question: "In system design, what is the primary role of a load balancer?", options: ["To store user session data", "To encrypt traffic between the client and server", "To distribute incoming network traffic across multiple servers", "To cache frequently accessed data"], answer: "To distribute incoming network traffic across multiple servers", explanation: "A load balancer acts as a traffic manager, distributing requests across a pool of servers to ensure no single server becomes a bottleneck. This improves availability, reliability, and scalability." },
+        { type: 'mcq', question: "What is the primary purpose of a CDN (Content Delivery Network)?", options: ["To balance load across application servers", "To distribute static content to servers closer to the user for faster delivery", "To act as a central database", "To provide a secure entry point to an application"], answer: "To distribute static content to servers closer to the user for faster delivery", explanation: "A CDN is a geographically distributed network of servers. It caches static content (like images, CSS, JS) at locations closer to end-users, which significantly reduces latency and improves page load times." },
+        { type: 'mcq', question: "If a primary caching layer (e.g., Redis) fails completely, what is the most critical impact on a typical web application?", options: ["The database will experience a massive increase in read load", "The application's background job processor will stop", "Users will be unable to log in", "Static assets like images will fail to load"], answer: "The database will experience a massive increase in read load", explanation: "A cache serves to absorb read requests, protecting the database. If the cache fails, all of those requests will suddenly hit the database directly, which can overwhelm it and cause a cascading failure." },
+        { type: 'mcq', question: "In a microservices architecture, why is using a message broker (like RabbitMQ or Kafka) for inter-service communication often better than direct HTTP calls?", options: ["It guarantees faster processing", "It ensures transactional integrity across services", "It decouples services and improves fault tolerance", "It uses less server memory than HTTP"], answer: "It decouples services and improves fault tolerance", explanation: "Message brokers allow for asynchronous communication. If a receiving service is down, the message can wait in the queue until the service is available again. This decoupling prevents a failure in one service from cascading to others." },
+        { type: 'mcq', question: "'Horizontal Scaling' (scaling out) refers to:", options: ["Increasing the resources (CPU, RAM) of a single server", "Adding more servers to your pool of resources", "Optimizing your code to run more efficiently", "Upgrading the network infrastructure"], answer: "Adding more servers to your pool of resources", explanation: "Horizontal scaling means adding more machines to the system. Vertical scaling (scaling up) means making a single machine more powerful. Horizontal scaling is often preferred for high availability and massive scale." },
+        { type: 'mcq', question: "Which SQL clause is used to filter results of an aggregate function?", options: ["WHERE", "FILTER", "HAVING", "GROUPFILTER"], answer: "HAVING", explanation: "The `WHERE` clause filters rows *before* they are grouped and aggregated. The `HAVING` clause filters the groups *after* the aggregate functions (like COUNT, SUM, AVG) have been calculated." },
+    ];
+    
+    const codeAnalysisQuestions = [
+        {
+            type: 'mcq',
+            question: "What will be printed to the console when the following Java code is executed?",
+            snippet: `class Animal {\n    public void makeSound() {\n        System.out.println("Animal sound");\n    }\n}\n\nclass Dog extends Animal {\n    @Override\n    public void makeSound() {\n        System.out.println("Woof");\n    }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        Animal myAnimal = new Dog();\n        myAnimal.makeSound();\n    }\n}`,
+            options: ["Animal sound", "Woof", "A compilation error will occur", "A runtime exception will be thrown"],
+            answer: "Woof",
+            explanation: "This is an example of runtime polymorphism. The variable `myAnimal` is of type `Animal`, but the object it references is a `Dog`. The JVM determines at runtime that the `Dog` class's overridden `makeSound()` method should be called."
+        },
+        {
+            type: 'mcq',
+            question: "Examine the following code. What is the final output?",
+            snippet: `class Vehicle {\n    public void display() {\n        System.out.println("Displaying Vehicle");\n    }\n}\n\nclass Car extends Vehicle {\n    @Override\n    public void display() {\n        super.display();\n        System.out.println("Displaying Car");\n    }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        Vehicle myCar = new Car();\n        myCar.display();\n    }\n}`,
+            options: ["Displaying Car", "Displaying Vehicle", "Displaying Vehicle\nDisplaying Car", "A compilation error because super is used"],
+            answer: "Displaying Vehicle\nDisplaying Car",
+            explanation: "The `Car`'s `display()` method overrides the parent's method. Inside it, `super.display()` explicitly calls the parent `Vehicle`'s method first, printing 'Displaying Vehicle'. Then, the next line in the `Car`'s method prints 'Displaying Car'."
+        },
+        {
+            type: 'mcq',
+            question: "What will be the output of this Java code snippet that demonstrates exception handling?",
+            snippet: `public class Test {\n    public static void check() {\n        try {\n            System.out.println("Inside try");\n            int result = 10 / 0;\n        } catch (ArithmeticException e) {\n            System.out.println("Inside catch");\n        } finally {\n            System.out.println("Inside finally");\n        }\n        System.out.println("After try-catch-finally");\n    }\n\n    public static void main(String[] args) {\n        check();\n    }\n}`,
+            options: ["Inside try\nInside catch\nInside finally\nAfter try-catch-finally", "Inside try\nInside catch\nInside finally", "Inside try\nInside finally", "Inside try"],
+            answer: "Inside try\nInside catch\nInside finally\nAfter try-catch-finally",
+            explanation: "The `try` block executes first. An `ArithmeticException` is thrown, so control transfers to the `catch` block. The `finally` block is *always* executed after the try/catch blocks, regardless of whether an exception was thrown. Finally, the code after the entire block executes."
+        },
+        {
+            type: 'mcq',
+            question: "Considering the Java interface and class below, which statement is true?",
+            snippet: `interface Drawable {\n    void draw();\n}\n\nclass Circle implements Drawable {\n    @Override\n    public void draw() {\n        System.out.println("Drawing a circle");\n    }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        Drawable d = new Circle();\n        d.draw();\n    }\n}`,
+            options: ["The code will fail to compile because `Drawable` has no implementation.", "An instance of `Drawable` can be created with `new Drawable()`.", "The code is a valid example of polymorphism using an interface.", "The `Circle` class should use `extends` instead of `implements`."],
+            answer: "The code is a valid example of polymorphism using an interface.",
+            explanation: "This demonstrates polymorphism where an object of a class (`Circle`) that implements an interface (`Drawable`) can be referenced by a variable of the interface type. This is a powerful feature for decoupling code."
+        },
+        {
+            type: 'mcq',
+            question: "What will be the output of the following Java code related to the String pool?",
+            snippet: `public class Test {\n    public static void main(String[] args) {\n        String s1 = "hello";\n        String s2 = "hello";\n        String s3 = new String("hello");\n        System.out.println(s1 == s2);\n        System.out.println(s1 == s3);\n    }\n}`,
+            options: ["true<br>true", "true<br>false", "false<br>true", "false<br>false"],
+            answer: "true<br>false",
+            explanation: "`s1` and `s2` both refer to the same string literal in the string pool, so their references are equal (`==`). `s3` is created using the `new` keyword, which forces the creation of a new object on the heap, so its reference is different from `s1`."
+        },
+        {
+            type: 'mcq',
+            question: "If you override the `equals()` method in a Java class, what is the best practice regarding the `hashCode()` method?",
+            snippet: `class Employee {\n    private int id;\n    // constructor, getters...\n\n    @Override\n    public boolean equals(Object obj) {\n        // implementation...\n        return true;\n    }\n\n    // What about hashCode()?\n}`,
+            options: ["You don't need to do anything with `hashCode()`.", "You must also override `hashCode()` to ensure that equal objects have the same hash code.", "You should make `hashCode()` return a random number for better distribution.", "You should make the `equals()` method `final`."],
+            answer: "You must also override `hashCode()` to ensure that equal objects have the same hash code.",
+            explanation: "The contract between `equals()` and `hashCode()` requires that if two objects are equal according to `equals()`, they MUST have the same hash code. Failing to do this will cause collections like `HashMap` and `HashSet` to behave incorrectly."
+        },
+        {
+            type: 'mcq',
+            question: "What is the output of this code, and why?",
+            snippet: `class Parent {\n    public static void show() {\n        System.out.println("Parent show");\n    }\n}\nclass Child extends Parent {\n    public static void show() {\n        System.out.println("Child show");\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Parent p = new Child();\n        p.show();\n    }\n}`,
+            options: ["Child show", "Parent show", "A compilation error", "A runtime error"],
+            answer: "Parent show",
+            explanation: "Static methods belong to the class, not the object. They do not participate in runtime polymorphism (overriding). The method call is resolved at compile time based on the reference type, which is `Parent`. This is called method hiding, not overriding."
+        },
+        { 
+            type: 'mcq', 
+            question: "What is the primary purpose of the `volatile` keyword in Java concurrency?", 
+            options: ["To make a method atomic.", "To ensure that changes to a variable are always visible to other threads.", "To lock an object so only one thread can access it.", "To make a class thread-safe."], 
+            answer: "To ensure that changes to a variable are always visible to other threads.", 
+            explanation: "The `volatile` keyword guarantees a 'happens-before' relationship. When a thread writes to a volatile variable, and another thread reads it, the write is guaranteed to be visible to the reading thread. It prevents issues from CPU caching but does not provide atomicity for compound actions (like incrementing)." 
+        },
     ];
 
     const codeOptimizationQuestions = [
@@ -118,7 +209,8 @@
                 "Option A is better because the `+` operator is automatically optimized by the Java compiler to be identical to `StringBuilder`.",
                 "Both are equally performant for any number of words."
             ],
-            answer: "Option B is better because `StringBuilder` is mutable, avoiding the creation of many intermediate String objects."
+            answer: "Option B is better because `StringBuilder` is mutable, avoiding the creation of many intermediate String objects.",
+            explanation: "In Java, `String` objects are immutable. Using the `+=` operator in a loop (Option A) creates a new `String` object in every iteration, leading to poor performance and high memory usage for large numbers of concatenations. `StringBuilder` (Option B) is a mutable sequence of characters and is designed for this exact scenario."
         },
         {
             type: 'code-comparison',
@@ -128,4 +220,336 @@
                 optionB: `// Option B: Fetch posts and authors in a single query\n@Query("SELECT p, a FROM Post p JOIN p.author a")\nList<Post> findPostsAndAuthors();\n\nList<Post> posts = postRepo.findPostsAndAuthors();`
             },
             options: [
-                "Option A is better because it's
+                "Option A is better because it's easier to read.",
+                "Option B is better because it reduces database round-trips from N+1 to just one.",
+                "Both are equally efficient because modern database drivers batch the queries in Option A.",
+                "Option A is better as it runs many small queries instead of one large query."
+            ],
+            answer: "Option B is better because it reduces database round-trips from N+1 to just one.",
+            explanation: "Option A suffers from the N+1 query problem: it executes one query to get all posts (the '+1'), and then N additional queries inside the loop (one for each post). Option B uses a JOIN to fetch all the necessary data in a single, much more efficient database query."
+        }
+    ];
+
+    // --- APPLICATION STATE & DOM ELEMENTS ---
+
+    const dom = {
+        loginScreen: document.getElementById('login-screen'),
+        quizScreen: document.getElementById('quiz-screen'),
+        resultsScreen: document.getElementById('results-screen'),
+        startBtn: document.getElementById('start-btn'),
+        prevBtn: document.getElementById('prev-btn'),
+        nextBtn: document.getElementById('next-btn'),
+        restartBtn: document.getElementById('restart-btn'),
+        downloadBtn: document.getElementById('download-btn'),
+        nameInput: document.getElementById('name'),
+        companyIdInput: document.getElementById('companyId'),
+        loginError: document.getElementById('login-error'),
+        quizIntro: document.getElementById('quiz-intro'),
+        questionNumber: document.getElementById('question-number'),
+        totalQuestions: document.getElementById('total-questions'),
+        questionText: document.getElementById('question-text'),
+        optionsContainer: document.getElementById('options-container'),
+        codeComparisonContainer: document.getElementById('code-comparison-container'),
+        timer: document.getElementById('timer'),
+        resultName: document.getElementById('result-name'),
+        resultCompanyId: document.getElementById('result-companyId'),
+        resultTime: document.getElementById('result-time'),
+        score: document.getElementById('score'),
+        correctAnswers: document.getElementById('correct-answers'),
+        incorrectAnswers: document.getElementById('incorrect-answers'),
+        detailedResults: document.getElementById('detailed-results'),
+    };
+
+    let state = {
+        questions: [],
+        currentQuestionIndex: 0,
+        userAnswers: [],
+        timerInterval: null,
+        timeLimit: 1800, // 30 minutes
+        timeRemaining: 1800,
+    };
+    
+    // --- INITIALIZATION ---
+    
+    function initialize() {
+        const allQuestions = [
+            ...generalQuestions,
+            ...javaQuestions,
+            ...oopQuestions,
+            ...dataStructuresAndAlgorithmsQuestions,
+            ...databaseAndScalabilityQuestions,
+            ...codeAnalysisQuestions,
+            ...codeOptimizationQuestions
+        ];
+        dom.quizIntro.textContent = `You will have 30 minutes to complete ${allQuestions.length} questions. Good luck!`;
+    }
+
+
+    // --- CORE FUNCTIONS ---
+
+    function startQuiz() {
+        if (!dom.nameInput.value.trim() || !dom.companyIdInput.value.trim()) {
+            dom.loginError.textContent = 'Please fill in both fields.';
+            return;
+        }
+        dom.loginError.textContent = '';
+        state.currentQuestionIndex = 0;
+
+        const allQuestions = [
+            ...generalQuestions,
+            ...javaQuestions,
+            ...oopQuestions,
+            ...dataStructuresAndAlgorithmsQuestions,
+            ...databaseAndScalabilityQuestions,
+            ...codeAnalysisQuestions,
+            ...codeOptimizationQuestions
+        ];
+        shuffleArray(allQuestions);
+        state.questions = allQuestions; // Use all available questions
+
+        state.userAnswers = new Array(state.questions.length).fill(null);
+        dom.totalQuestions.textContent = state.questions.length;
+        
+        switchScreen(dom.loginScreen, dom.quizScreen);
+        displayQuestion();
+        startTimer();
+    }
+
+    function displayQuestion() {
+        const question = state.questions[state.currentQuestionIndex];
+        dom.questionNumber.textContent = state.currentQuestionIndex + 1;
+        
+        dom.optionsContainer.innerHTML = '';
+        dom.codeComparisonContainer.innerHTML = '';
+        dom.questionText.innerHTML = escapeHtml(question.question);
+
+        if (question.type === 'code-comparison') {
+            dom.codeComparisonContainer.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1 code-snippet"><pre>${escapeHtml(question.snippets.optionA)}</pre></div>
+                    <div class="flex-1 code-snippet"><pre>${escapeHtml(question.snippets.optionB)}</pre></div>
+                </div>
+            `;
+        } else if (question.snippet) { // Handle single snippet questions
+             dom.codeComparisonContainer.innerHTML = `
+                <div class="flex justify-center">
+                    <div class="w-full md:w-4/5 code-snippet"><pre>${escapeHtml(question.snippet)}</pre></div>
+                </div>
+            `;
+        }
+        
+        question.options.forEach(optionText => {
+            const button = document.createElement('button');
+            button.innerHTML = optionText; // Allow <br> tags
+            button.classList.add('w-full', 'p-4', 'text-left', 'border', 'border-gray-300', 'rounded-lg', 'option-btn');
+            if (optionText === state.userAnswers[state.currentQuestionIndex]) {
+                button.classList.add('selected');
+            }
+            button.onclick = () => selectAnswer(optionText);
+            dom.optionsContainer.appendChild(button);
+        });
+        updateNavigationButtons();
+    }
+    
+    function finishQuiz() {
+        stopTimer();
+        calculateAndShowResults();
+        switchScreen(dom.quizScreen, dom.resultsScreen);
+    }
+    
+    function calculateAndShowResults() {
+        let correctCount = state.questions.reduce((count, question, index) => {
+            return state.userAnswers[index] === question.answer ? count + 1 : count;
+        }, 0);
+
+        dom.detailedResults.innerHTML = '';
+        state.questions.forEach((question, index) => {
+            const userAnswer = state.userAnswers[index];
+            const isCorrect = userAnswer === question.answer;
+            const resultItem = document.createElement('div');
+            resultItem.className = `p-4 rounded-lg border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`;
+            
+            let explanationHtml = '';
+            if (!isCorrect) {
+                explanationHtml = `
+                    <p class="mt-1 text-sm text-green-800">Correct answer: <strong>${question.answer}</strong></p>
+                    <p class="mt-2 text-sm text-gray-600 bg-gray-100 p-2 rounded"><strong>Reason:</strong> ${escapeHtml(question.explanation)}</p>
+                `;
+            }
+
+            resultItem.innerHTML = `
+                <p class="font-bold">${index + 1}. ${escapeHtml(question.question)}</p>
+                ${question.snippet ? `<div class="mt-2 code-snippet !p-2 !text-sm"><pre>${escapeHtml(question.snippet)}</pre></div>` : ''}
+                ${question.type === 'code-comparison' ? `<div class="mt-2 flex gap-2"><div class="flex-1 code-snippet !p-2 !text-sm"><pre>${escapeHtml(question.snippets.optionA)}</pre></div><div class="flex-1 code-snippet !p-2 !text-sm"><pre>${escapeHtml(question.snippets.optionB)}</pre></div></div>` : ''}
+                <p class="mt-2 text-sm ${isCorrect ? 'text-green-700' : 'text-red-700'}">Your answer: <strong>${userAnswer ? escapeHtml(userAnswer) : 'Not answered'}</strong></p>
+                ${explanationHtml}
+            `;
+            dom.detailedResults.appendChild(resultItem);
+        });
+
+        const incorrectCount = state.questions.length - correctCount;
+        const timeTaken = state.timeLimit - state.timeRemaining;
+        
+        dom.resultName.textContent = dom.nameInput.value;
+        dom.resultCompanyId.textContent = dom.companyIdInput.value;
+        dom.resultTime.textContent = formatTime(timeTaken);
+        dom.score.textContent = `${correctCount}/${state.questions.length}`;
+        dom.correctAnswers.textContent = correctCount;
+        dom.incorrectAnswers.textContent = incorrectCount;
+    }
+
+    // --- NAVIGATION & EVENT HANDLERS ---
+    
+    function selectAnswer(selectedOption) {
+        state.userAnswers[state.currentQuestionIndex] = selectedOption;
+        const buttons = dom.optionsContainer.querySelectorAll('.option-btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('selected');
+            if (btn.innerHTML === selectedOption) {
+                btn.classList.add('selected');
+            }
+        });
+    }
+
+    function nextQuestion() {
+        if (state.currentQuestionIndex < state.questions.length - 1) {
+            state.currentQuestionIndex++;
+            displayQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function previousQuestion() {
+        if (state.currentQuestionIndex > 0) {
+            state.currentQuestionIndex--;
+            displayQuestion();
+        }
+    }
+    
+    function restartQuiz() {
+        switchScreen(dom.resultsScreen, dom.loginScreen);
+        initialize(); 
+    }
+    
+    function updateNavigationButtons() {
+        dom.prevBtn.disabled = state.currentQuestionIndex === 0;
+        dom.nextBtn.textContent = (state.currentQuestionIndex === state.questions.length - 1) ? 'Finish' : 'Next';
+    }
+
+    // --- UTILITY FUNCTIONS ---
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+    
+    function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        return `${minutes}:${seconds}`;
+    }
+
+    function startTimer() {
+        state.timeRemaining = state.timeLimit;
+        dom.timer.textContent = formatTime(state.timeRemaining);
+        dom.timer.classList.remove('timer-warning');
+        state.timerInterval = setInterval(() => {
+            state.timeRemaining--;
+            dom.timer.textContent = formatTime(state.timeRemaining);
+            if (state.timeRemaining <= 60 && !dom.timer.classList.contains('timer-warning')) { 
+                dom.timer.classList.add('timer-warning'); 
+            }
+            if (state.timeRemaining <= 0) { finishQuiz(); }
+        }, 1000);
+    }
+    
+    function stopTimer() { clearInterval(state.timerInterval); }
+    
+    function switchScreen(hideEl, showEl) {
+        hideEl.style.opacity = '0';
+        setTimeout(() => {
+            hideEl.classList.add('hidden');
+            showEl.classList.remove('hidden');
+            setTimeout(() => { showEl.style.opacity = '1'; }, 20);
+        }, 500);
+    }
+    
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        // Allow <br> for formatting in options
+        if (typeof str === 'string' && str.includes('<br>')) {
+             return str.replace(/[&<>"']/g, function(match) {
+                if (match === '<' || match === '>') return match; // Don't escape < and > in <br>
+                return {
+                    '&': '&amp;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[match];
+            });
+        }
+        return str.toString().replace(/[&<>"']/g, function(match) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[match];
+        });
+    }
+
+    function generateTxtFile() {
+        let fileContent = "Senior Technical Concepts Quiz Results\n=================================\n\n";
+        fileContent += `Name: ${dom.nameInput.value}\nCompany ID: ${dom.companyIdInput.value}\n\n--- Summary ---\n`;
+        fileContent += `Final Score: ${dom.score.textContent}\nCorrect Answers: ${dom.correctAnswers.textContent}\n`;
+        fileContent += `Incorrect Answers: ${dom.incorrectAnswers.textContent}\nTime Taken: ${dom.resultTime.textContent}\n\n`;
+        fileContent += `--- Detailed Breakdown ---\n\n`;
+        
+        state.questions.forEach((question, index) => {
+            const userAnswer = state.userAnswers[index] || "Not answered";
+            const isCorrect = userAnswer === question.answer;
+            fileContent += `--------------------------\n\n`;
+            fileContent += `Question ${index + 1}: ${question.question}\n\n`;
+            if (question.snippet) {
+                fileContent += `Code Snippet:\n${question.snippet}\n\n`;
+            }
+            if (question.type === 'code-comparison') {
+                fileContent += `Option A:\n${question.snippets.optionA}\n\n`;
+                fileContent += `Option B:\n${question.snippets.optionB}\n\n`;
+            }
+            fileContent += `Your Answer: ${userAnswer.replace(/<br>/g, "\n")} ${isCorrect ? '(Correct)' : '(Incorrect)'}\n`;
+            if (!isCorrect) {
+                fileContent += `Correct Answer: ${question.answer.replace(/<br>/g, "\n")}\n`;
+                fileContent += `Reason: ${question.explanation}\n`;
+            }
+            fileContent += `\n`;
+        });
+        
+        const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        const fileName = `${dom.nameInput.value.replace(/\s/g, '_') || 'User'}_QuizResults.txt`;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+
+    // --- EVENT LISTENERS ---
+    dom.startBtn.addEventListener('click', startQuiz);
+    dom.nextBtn.addEventListener('click', nextQuestion);
+    dom.prevBtn.addEventListener('click', previousQuestion);
+    dom.restartBtn.addEventListener('click', restartQuiz);
+    dom.downloadBtn.addEventListener('click', generateTxtFile);
+    
+    // Initialize on page load
+    initialize();
+
+</script>
+</body>
+</html>
+
